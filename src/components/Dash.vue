@@ -123,12 +123,13 @@
                 <!-- User image -->
                 <li class="user-header">
                   <img v-bind:src="demo.avatar" class="img-circle" alt="User Image">
-
                   <p>{{ demo.displayName }}</p>
                 </li>
                 <li class="user-footer">
                   <div class="pull-left">
-                    <a href="#" class="btn btn-default btn-flat"><i class="fa fa-user" aria-hidden="true"></i> Profile</a>
+                    <a @click="checkWallet" href="javascript:;" class="btn btn-default btn-flat">
+                      <i class="fa fa-user" aria-hidden="true"></i> Profile
+                    </a>
                   </div>
                   <div class="pull-right">
                     <a @click="logout" href="javascript:;" class="btn btn-default btn-flat">
@@ -167,8 +168,9 @@
           <li class="active">{{$route.name}}</li>
         </ol>
       </section>
-
-      <router-view></router-view>
+      <transition name="slide-fade">
+        <router-view></router-view>
+      </transition>
     </div>
     <!-- /.content-wrapper -->
 
@@ -185,6 +187,7 @@ import faker from 'faker'
 import { mapState } from 'vuex'
 import config from '../config'
 import Sidebar from './Sidebar'
+import axios from 'axios'
 import auth from '../auth'
 import 'hideseek'
 
@@ -218,6 +221,19 @@ export default {
     }
   },
   methods: {
+    checkWallet () {
+      var apiUrl = this.$store.state.serverURI
+      axios.post(apiUrl + 'wallet/unlock', {
+        password: 'passw'
+      })
+      .then(function (response) {
+        console.log(response)
+      })
+      .catch(function (error) {
+        console.log(error)
+        return
+      })
+    },
     logout () {
       auth.logout()
       this.$router.push('/auth')
@@ -277,5 +293,9 @@ hr.visible-xs-block {
   background-color: rgba(0, 0, 0, 0.17);
   height: 1px;
   border-color: transparent;
+}
+
+.user-footer {
+  box-shadow: 0 0 20px black;
 }
 </style>

@@ -50,14 +50,14 @@ router.beforeEach((to, from, next) => {
   // console.log(to.meta)
   if (to.meta.auth) { // check the meta field
     if (auth.checkAuth()) {
-      console.log('auth')
+      // console.log('auth')
       next()
     } else {
-      console.log('no_auth')
+      // console.log('no_auth')
       next('/auth') // Redirect the user to the login page
     }
   } else {
-    console.log('auth')
+    // console.log('auth')
     next()
   }
 })

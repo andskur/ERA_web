@@ -2,20 +2,21 @@
   <!-- <form class="ui form loginForm"  @submit.prevent="createSeed"> -->
   <form v-if=!base58.AccountSeed class="ui form loginForm"  @submit.prevent="createSeed">
 
-    <div class="input-group">
+    <!-- <div class="input-group">
       <span class="input-group-addon"><i class="fa fa-lock"></i></span>
       <input class="form-control" name="password" placeholder="Password" type="password" v-model="password">
+    </div> -->
+
+    <h4>Remember your seed! </h4>
+    <div class="input-group">
+      <span class="input-group-addon"><i class="fa fa-certificate"></i></span>
+      <input readonly class="form-control" name="seed" placeholder="Base 58 Seed" type="text" v-model="seed">
     </div>
 
     <!-- errors -->
     <div v-if=response class="text-red"><p>{{response}}</p></div>
 
-    <div class="input-group">
-      <span class="input-group-addon"><i class="fa fa-certificate"></i></span>
-      <input readonly class="form-control" name="seed" placeholder="Base Seed" type="text" v-model="newSeed">
-    </div>
-
-    <button type="submit" v-bind:class="'btn btn-primary btn-lg ' + loading">Submit</button>
+    <button type="submit" v-bind:class="'btn btn-primary btn-lg ' + loading">Next <i class="fa fa-arrow-right" aria-hidden="true"></i></button>
   </form>
   <form v-else class="ui form loginForm" @submit.prevent="postWallet">
 
@@ -43,7 +44,7 @@
 
 <script>
 import axios from 'axios'
-import api from '../../api'
+// import api from '../../api'
 // var SHA256 = require('../../libs/sha256.js')
 // import SHA256 from '../../libs/sha256.js'
 // import Base58 from '../../libs/Base58.js'
@@ -52,6 +53,7 @@ import api from '../../api'
 // require('../../libs/qora.js')
 
 import crypto from '../../crypto/index.js'
+const serverURI = 'http://localhost:8080/api/'
 
 export default {
   name: 'New',
@@ -73,14 +75,17 @@ export default {
       response: ''
     }
   },
+  created () {
+    this.generate58Seed()
+  },
   methods: {
     postWallet () {
       console.log(this.base58.addressSeed)
       // crypto.accountFromSeed(this.base58.addressSeed)
       crypto.accountFromSeed('CJWDvjD4Z1VdyArmK8a1ivRWqcrQP6njtza2dmZPaQFF')
       console.log(this.base58.AccountAddress)
-      // axios.post(this.$store.state.serverURI + 'wallet', {
-      axios.post(this.$store.state.serverURI + 'wallet/unlock', {
+      axios.post(this.$store.state.serverURI + 'wallet', {
+      // axios.post(this.$store.state.serverURI + 'wallet/unlock', {
         seed: this.base58.AccountSeed,
         password: this.password
       })
@@ -91,8 +96,19 @@ export default {
         console.log(error)
       })
     },
+    generate58Seed () {
+      axios.get(serverURI + 'seed')
+        .then((response) => {
+          var seed = response.data.seed
+          // console.log(seed)
+          this.seed = seed
+        })
+      .catch(function (error) {
+        console.log(error)
+      })
+    },
     createSeed () {
-      let seed58 = this.newSeed
+      let seed58 = this.seed
       if (!seed58) {
         this.response = 'invalid seed!'
         this.toggleLoading()
@@ -100,10 +116,7 @@ export default {
         return
       }
 
-      crypto.createAddressSeed(this, seed58)
-
-      console.log(this.base58.AccountSeed)
-      console.log(this.base58.AccountAddress)
+      crypto.createAddressSeed(seed58)
     },
     /*
     doAccountFromSeed (base58AccountSeed) {
@@ -128,63 +141,15 @@ export default {
       this.base58.AccountPrivateKey = Base58.encode(this.keyPair.privateKey)
     },
     */
-    checkCreds () {
-      const {seed, password} = this
-
-      this.toggleLoading()
-      this.resetResponse()
-      this.$store.commit('TOGGLE_LOADING')
-
-      /* Making API call to authenticate a user */
-      api.request('post', '/login', {seed, password})
-      .then(response => {
-        this.toggleLoading()
-
-        var data = response.data
-        /* Checking if error object was returned from the server */
-        if (data.error) {
-          var errorName = data.error.name
-          if (errorName) {
-            this.response = errorName === 'InvalidCredentialsError'
-            ? 'Seed/Password incorrect. Please try again.'
-            : errorName
-          } else {
-            this.response = data.error
-          }
-
-          return
-        }
-
-        /* Setting user in the state and caching record to the localStorage */
-        if (data.user) {
-          var token = 'Bearer ' + data.token
-
-          this.$store.commit('SET_USER', data.user)
-          this.$store.commit('SET_TOKEN', token)
-
-          if (window.localStorage) {
-            window.localStorage.setItem('seed', JSON.stringify(data.user))
-            window.localStorage.setItem('token', token)
-          }
-
-          this.$router.push(data.redirect)
-        }
-      })
-      .catch(error => {
-        this.$store.commit('TOGGLE_LOADING')
-        console.log(error)
-
-        this.response = 'Server appears to be offline'
-        this.toggleLoading()
-      })
-    },
     toggleLoading () {
       this.loading = (this.loading === '') ? 'loading' : ''
     },
     resetResponse () {
       this.response = ''
     }
-  },
+  }
+
+  /*
   computed: {
     newSeed: function () {
       const {password} = this
@@ -198,14 +163,12 @@ export default {
         this.toggleLoading()
         return
       }
-      // let byteSeed = new Uint8Array(SHA256.digest(SHA256.digest(password)))
-      // let base58BaseSeed = Base58.encode(byteSeed)
-
       this.seed = crypto.generateSeed(password)
 
       return this.seed
     }
   }
+  */
 }
 </script>
 

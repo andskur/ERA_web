@@ -1,11 +1,11 @@
 import axios from 'axios'
 
-const API_URL = 'http://localhost:3001/'
+// const API_URL = 'http://localhost:3001/'
 // const LOGIN_URL = API_URL + 'sessions/create/'
-const SIGNUP_URL = API_URL + 'users/'
+// const SIGNUP_URL = API_URL + 'users/'
+const API_URL = 'http://localhost:8080/api/'
 
 import token from './token.js'
-
 import crypto from '../crypto/index.js'
 
 export default {
@@ -17,20 +17,33 @@ export default {
   // Send a request to the login URL and save the returned JWT
   login (context, credentials) {
     var seed = credentials.seed
-    // var passw = creds.password
+    var passw = credentials.password
 
     // console.log(credentials)
 
     crypto.generateKeys(seed)
 
     var privatekey = crypto.base58.AccountPrivateKey
+    var publickey = crypto.base58.AccountPublicKey
 
     window.localStorage.setItem('id_token', token.createIdToken(seed, privatekey))
     window.localStorage.setItem('access_token', token.createAccessToken(privatekey))
+    window.localStorage.setItem('privatekey', privatekey)
+    window.localStorage.setItem('publickey', publickey)
 
-    this.user.authenticated = true
+    axios.post(API_URL + '/wallet/unlock', {
+      password: passw
+    })
+    .then(function (response) {
+      console.log(response)
 
-    axios.defaults.headers.common['Authorization'] = 'Bearer' + window.localStorage.getItem('access_token')
+      axios.defaults.headers.common['Authorization'] = 'Bearer' + window.localStorage.getItem('access_token')
+      this.user.authenticated = true
+    })
+    .catch(function (error) {
+      console.log(error)
+      return
+    })
 
 /*
     axios.get('http://localhost:8080/api/blocks/last')
@@ -68,7 +81,7 @@ export default {
   },
 
   signup (context, creds, redirect) {
-    context.$http.post(SIGNUP_URL, creds, (data) => {
+    context.$http.post(API_URL, creds, (data) => {
       window.localStorage.setItem('id_token', data.id_token)
       window.localStorage.setItem('access_token', data.access_token)
 
@@ -96,6 +109,7 @@ export default {
       this.user.authenticated = true
     } else {
       this.user.authenticated = false
+      return
     }
     return this.user.authenticated
   },

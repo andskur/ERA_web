@@ -1,45 +1,62 @@
 <template>
   <!-- <form class="ui form loginForm"  @submit.prevent="createSeed"> -->
-  <form v-if=!base58.AccountSeed class="ui form loginForm"  @submit.prevent="createSeed">
+  <div>
+    <form v-if=!validateSeed class="ui form loginForm"  @submit.prevent="checkSeed">
 
-    <!-- <div class="input-group">
-      <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-      <input class="form-control" name="password" placeholder="Password" type="password" v-model="password">
-    </div> -->
+      <!-- <div class="input-group">
+        <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+        <input class="form-control" name="password" placeholder="Password" type="password" v-model="password">
+      </div> -->
 
-    <h4>Remember your seed! </h4>
-    <div class="input-group">
-      <span class="input-group-addon"><i class="fa fa-certificate"></i></span>
-      <input readonly class="form-control" name="seed" placeholder="Base 58 Seed" type="text" v-model="seed">
-    </div>
+      <h4>Remember your seed! </h4>
+      <div class="input-group">
+        <span class="input-group-addon"><i class="fa fa-certificate"></i></span>
+        <input readonly class="form-control" name="seed" placeholder="Base 58 Seed" type="text" v-model="seed">
+      </div>
+
+      <button type="submit" v-bind:class="'btn btn-primary btn-lg ' + loading">Next <i class="fa fa-arrow-right" aria-hidden="true"></i></button>
+    </form>
+    <form v-else class="ui form loginForm" @submit.prevent="createWallet">
+
+      <div class="input-group" v-bind:class="{ 'has-error': repeatseed !== seed}">
+        <span class="input-group-addon"><i class="fa fa-certificate"></i></span>
+        <input class="form-control" name="seed" placeholder="Repeat your seed" type="text" v-model="repeatseed">
+      </div>
+
+      <div class="input-group" v-bind:class="{ 'has-error': password < 8}">
+        <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+        <input class="form-control" name="password" placeholder="Password" type="password" v-model="password">
+      </div>
+
+      <div class="input-group" v-bind:class="{ 'has-error': repeatpassword !== password}">
+        <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+        <input class="form-control" name="password" placeholder="Repeat your password" type="password" v-model="repeatpassword">
+      </div>
+
+      <!-- <label>Account address</label>
+      <div class="input-group">
+        <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+        <input class="form-control" name="address" placeholder="Seed" v-model="base58.AccountAddress">
+      </div>
+
+      <label>Public key</label>
+      <div class="input-group">
+        <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+        <input class="form-control" name="publickey" v-model="base58.AccountPublicKey">
+      </div>
+
+      <label>Private key</label>
+      <div class="input-group">
+        <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+        <input readonly class="form-control" name="privatekey" v-model="base58.AccountPrivateKey">
+      </div> -->
+
+      <button type="submit" v-bind:class="'btn btn-primary btn-lg ' + loading">Complete!</button>
+    </form>
 
     <!-- errors -->
     <div v-if=response class="text-red"><p>{{response}}</p></div>
-
-    <button type="submit" v-bind:class="'btn btn-primary btn-lg ' + loading">Next <i class="fa fa-arrow-right" aria-hidden="true"></i></button>
-  </form>
-  <form v-else class="ui form loginForm" @submit.prevent="postWallet">
-
-    <label>Account address</label>
-    <div class="input-group">
-      <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-      <input class="form-control" name="address" placeholder="Seed" v-model="base58.AccountAddress">
-    </div>
-
-    <label>Public key</label>
-    <div class="input-group">
-      <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-      <input class="form-control" name="publickey" v-model="base58.AccountPublicKey">
-    </div>
-
-    <label>Private key</label>
-    <div class="input-group">
-      <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-      <input readonly class="form-control" name="privatekey" v-model="base58.AccountPrivateKey">
-    </div>
-
-    <button type="submit" v-bind:class="'btn btn-primary btn-lg ' + loading">Submit</button>
-  </form>
+  </div>
 </template>
 
 <script>
@@ -52,12 +69,15 @@ import axios from 'axios'
 // import qora from '../../libs/qora.js'
 // require('../../libs/qora.js')
 
-import crypto from '../../crypto/index.js'
+// import crypto from '../../crypto/index.js'
+import auth from '../../auth'
+
 const serverURI = 'http://localhost:8080/api/'
 
 export default {
   name: 'New',
   data (router) {
+    /*
     return {
       section: 'New',
       loading: '',
@@ -74,27 +94,32 @@ export default {
       },
       response: ''
     }
+    */
+    return {
+      section: 'New',
+      loading: '',
+      seed: '',
+      validateSeed: '',
+      repeatseed: '',
+      password: '',
+      repeatpassword: '',
+      keys: '',
+      response: ''
+    }
   },
   created () {
+    this.toggleLoading()
     this.generate58Seed()
   },
   methods: {
-    postWallet () {
-      console.log(this.base58.addressSeed)
-      // crypto.accountFromSeed(this.base58.addressSeed)
-      crypto.accountFromSeed('CJWDvjD4Z1VdyArmK8a1ivRWqcrQP6njtza2dmZPaQFF')
-      console.log(this.base58.AccountAddress)
-      axios.post(this.$store.state.serverURI + 'wallet', {
-      // axios.post(this.$store.state.serverURI + 'wallet/unlock', {
-        seed: this.base58.AccountSeed,
-        password: this.password
-      })
-      .then(function (response) {
-        console.log(response)
-      })
-      .catch(function (error) {
-        console.log(error)
-      })
+    createWallet () {
+      this.toggleLoading()
+      if (this.validateWallet()) {
+        auth.signup(this.seed, this.password)
+        this.$router.push('/')
+      }
+      // this.response = 'ivalid wallet!'
+      return
     },
     generate58Seed () {
       axios.get(serverURI + 'seed')
@@ -107,7 +132,8 @@ export default {
         console.log(error)
       })
     },
-    createSeed () {
+    checkSeed () {
+      this.toggleLoading()
       let seed58 = this.seed
       if (!seed58) {
         this.response = 'invalid seed!'
@@ -116,7 +142,21 @@ export default {
         return
       }
 
-      crypto.createAddressSeed(seed58)
+      this.validateSeed = true
+      // console.log(crypto.createAddressSeed(seed58))
+      // this.keys = crypto.generateKeys(seed58)
+    },
+    validateWallet () {
+      this.resetResponse()
+      if (this.seed !== this.repeatseed) {
+        this.response = 'invalid seed!'
+        return false
+      }
+      if (this.password !== this.repeatpassword) {
+        this.response = 'invalid password!'
+        return false
+      }
+      return true
     },
     /*
     doAccountFromSeed (base58AccountSeed) {

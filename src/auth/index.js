@@ -80,19 +80,33 @@ export default {
     */
   },
 
-  signup (context, creds, redirect) {
-    context.$http.post(API_URL, creds, (data) => {
-      window.localStorage.setItem('id_token', data.id_token)
-      window.localStorage.setItem('access_token', data.access_token)
+  signup (seed, password) {
+    crypto.generateKeys(seed)
 
-      this.user.authenticated = true
+    var privatekey = crypto.base58.AccountPrivateKey
+    var publickey = crypto.base58.AccountPublicKey
 
-      if (redirect) {
-        // router.go(redirect)
-      }
-    }).error((err) => {
-      context.error = err
+    window.localStorage.setItem('id_token', token.createIdToken(seed, privatekey))
+    window.localStorage.setItem('access_token', token.createAccessToken(privatekey))
+    window.localStorage.setItem('privatekey', privatekey)
+    window.localStorage.setItem('publickey', publickey)
+
+    axios.defaults.headers.common['Authorization'] = 'Bearer' + window.localStorage.getItem('access_token')
+    this.user.authenticated = true
+
+    /*
+    axios.post(API_URL + 'wallet', {
+      seed: seed,
+      password: password,
+      recover: true
     })
+    .then((response) => {
+      console.log(response.data)
+    })
+    .catch(function (error) {
+      console.log(error)
+    })
+    */
   },
 
   // To log out, we just need to remove the token

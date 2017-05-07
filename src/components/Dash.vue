@@ -26,7 +26,7 @@
                 <i class="fa fa-envelope-o"></i>
                 <span class="label label-success">{{ userInfo.messages | count }}</span>
               </a>
-              <ul class="dropdown-menu">
+              <ul class="dropdown-menu shadow-3">
                 <li class="header">You have {{ userInfo.messages | count }} message(s)</li>
                 <li v-if="userInfo.messages.length > 0">
                   <!-- inner menu: contains the messages -->
@@ -61,7 +61,7 @@
                 <i class="fa fa-bell-o"></i>
                 <span class="label label-warning">{{ userInfo.notifications | count }}</span>
               </a>
-              <ul class="dropdown-menu">
+              <ul class="dropdown-menu shadow-3">
                 <li class="header">You have {{ userInfo.notifications | count }} notification(s)</li>
                 <li v-if="userInfo.notifications.length > 0">
                   <!-- Inner Menu: contains the notifications -->
@@ -119,7 +119,7 @@
                 <img v-bind:src="demo.avatar" class="user-image" alt="User Image">
                 <span class="hidden-xs">{{ demo.displayName }}</span>
               </a>
-              <ul class="dropdown-menu">
+              <ul class="dropdown-menu shadow-3">
                 <!-- User image -->
                 <li class="user-header">
                   <img v-bind:src="demo.avatar" class="img-circle" alt="User Image">
@@ -295,7 +295,7 @@ hr.visible-xs-block {
   border-color: transparent;
 }
 
-.user-footer {
-  box-shadow: 0 0 20px black;
+.shadow-3 {
+  box-shadow: 0 0 5px black;
 }
 </style>

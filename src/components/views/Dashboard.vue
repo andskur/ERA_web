@@ -182,7 +182,7 @@ export default {
     }
   },
   created () {
-    var url = this.$store.state.serverURI + ''
+    var url = this.$store.state.serverURI
 
     axios.get(url + 'addresses')
       .then((response) => {

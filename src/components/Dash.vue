@@ -20,6 +20,20 @@
         <!-- Navbar Right Menu -->
         <div class="navbar-custom-menu">
           <ul class="nav navbar-nav">
+            <!-- Status -->
+            <li>
+              <a>Wallet: <span>{{status.wallet}} </span>
+                <i v-if="status.wallet === 'Up to date'" class="fa fa-circle text-success"></i>
+                <i v-else-if="status.wallet === 'Synchronizing'" class="fa fa-circle text-yellow"></i>
+                <i v-else class="fa fa-circle text-danger"></i></a>
+            </li>
+            <li>
+              <a>
+                Forging: <span>{{status.forging}} </span>
+                <i v-if="status.forging === 'Enabled'" class="fa fa-circle text-success"></i>
+                <i v-else class="fa fa-circle text-danger"></i>
+              </a>
+            </li>
             <!-- Messages-->
             <li class="dropdown messages-menu">
               <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
@@ -127,7 +141,7 @@
                 </li>
                 <li class="user-footer">
                   <div class="pull-left">
-                    <a @click="checkWallet" href="javascript:;" class="btn btn-default btn-flat">
+                    <a @click="" href="javascript:;" class="btn btn-default btn-flat">
                       <i class="fa fa-user" aria-hidden="true"></i> Profile
                     </a>
                   </div>
@@ -204,8 +218,16 @@ export default {
         fixed_layout: config.fixedLayout,
         hide_logo: config.hideLogoOnMobile
       },
+      status: {
+        wallet: '',
+        forging: ''
+      },
       error: ''
     }
+  },
+  created () {
+    this.checkWallet()
+    this.checkForging()
   },
   computed: {
     ...mapState([
@@ -222,16 +244,55 @@ export default {
   },
   methods: {
     checkWallet () {
-      var apiUrl = this.$store.state.serverURI
-      axios.post(apiUrl + 'wallet/unlock', {
-        password: 'passw'
-      })
-      .then(function (response) {
-        console.log(response)
+      var url = this.$store.state.serverURI
+      axios.get(url + 'core/status/')
+      .then((response) => {
+        let status
+        switch (response.data) {
+          case 0:
+            status = 'No connections'
+            break
+          case 1:
+            status = 'Synchronizing'
+            break
+          case 2:
+            status = 'Up to date'
+            break
+          default:
+            status = 'Error'
+            break
+        }
+        console.log('wallet status: ' + status)
+        this.status.wallet = status
       })
       .catch(function (error) {
         console.log(error)
-        return
+      })
+    },
+    checkForging () {
+      var url = this.$store.state.serverURI
+      axios.get(url + 'core/status/forging')
+      .then((response) => {
+        let status
+        switch (response.data) {
+          case 0:
+            status = 'Disabled'
+            break
+          case 1:
+            status = 'Enabled'
+            break
+          case 2:
+            status = 'Enabled'
+            break
+          default:
+            status = 'Error'
+            break
+        }
+        console.log('forging status: ' + status)
+        this.status.forging = status
+      })
+      .catch(function (error) {
+        console.log(error)
       })
     },
     logout () {

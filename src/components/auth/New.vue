@@ -1,59 +1,74 @@
 <template>
-  <!-- <form class="ui form loginForm"  @submit.prevent="createSeed"> -->
   <div>
-    <form v-if=!validateSeed class="ui form loginForm"  @submit.prevent="checkSeed">
+    <transition 
+      name="custom-classes-transition"
+      enter-active-class="animated fadeInLeft"
+      leave-active-class="animated fadeOutRight"
+      mode="out-in"
+    >
+      <form v-if="!validateSeed" class="ui form loginForm"  @submit.prevent="checkSeed" key="seed_validate">
 
-      <!-- <div class="input-group">
-        <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-        <input class="form-control" name="password" placeholder="Password" type="password" v-model="password">
-      </div> -->
+        <!-- <div class="input-group">
+          <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+          <input class="form-control" name="password" placeholder="Password" type="password" v-model="password">
+        </div> -->
 
-      <h4>Remember your seed! </h4>
-      <div class="input-group">
-        <span class="input-group-addon"><i class="fa fa-certificate"></i></span>
-        <input readonly class="form-control" name="seed" placeholder="Base 58 Seed" type="text" v-model="seed">
-      </div>
+        <h4 class="animated infinite bounce">Remember your seed! </h4>
+        <div class="input-group">
+          <span class="input-group-addon"><i class="fa fa-certificate"></i></span>
+          <input readonly class="form-control" name="seed" placeholder="Base 58 Seed" type="text" v-model="seed">
+        </div>
 
-      <button type="submit" v-bind:class="'btn btn-primary btn-lg ' + loading">Next <i class="fa fa-arrow-right" aria-hidden="true"></i></button>
-    </form>
-    <form v-else class="ui form loginForm" @submit.prevent="createWallet">
+        <button type="submit" v-bind:class="'btn btn-primary btn-lg hvr-icon-forward fade-hover ' + loading">Next 
+          <!-- <i class="fa fa-arrow-right" aria-hidden="true"></i> -->
+        </button>
+      </form>
+      <form v-else class="ui form loginForm" @submit.prevent="createWallet" key="seed_submit">
 
-      <div class="input-group" v-bind:class="{ 'has-error': repeatseed !== seed}">
-        <span class="input-group-addon"><i class="fa fa-certificate"></i></span>
-        <input class="form-control" name="seed" placeholder="Repeat your seed" type="text" v-model="repeatseed">
-      </div>
+        <div class="input-group" v-bind:class="{ 'has-error': repeatseed !== seed}">
+          <span class="input-group-addon"><i class="fa fa-certificate"></i></span>
+          <input class="form-control" name="seed" placeholder="Repeat your seed" type="text" v-model="repeatseed">
+        </div>
 
-      <div class="input-group" v-bind:class="{ 'has-error': password < 8}">
-        <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-        <input class="form-control" name="password" placeholder="Password" type="password" v-model="password">
-      </div>
+        <div class="input-group" v-bind:class="{ 'has-error': password < 8}">
+          <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+          <input class="form-control" name="password" placeholder="Password" type="password" v-model="password">
+        </div>
 
-      <div class="input-group" v-bind:class="{ 'has-error': repeatpassword !== password}">
-        <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-        <input class="form-control" name="password" placeholder="Repeat your password" type="password" v-model="repeatpassword">
-      </div>
+        <div class="input-group" v-bind:class="{ 'has-error': repeatpassword !== password}">
+          <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+          <input class="form-control" name="password" placeholder="Repeat your password" type="password" v-model="repeatpassword">
+        </div>
 
-      <!-- <label>Account address</label>
-      <div class="input-group">
-        <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-        <input class="form-control" name="address" placeholder="Seed" v-model="base58.AccountAddress">
-      </div>
+        <!-- <label>Account address</label>
+        <div class="input-group">
+          <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+          <input class="form-control" name="address" placeholder="Seed" v-model="base58.AccountAddress">
+        </div>
 
-      <label>Public key</label>
-      <div class="input-group">
-        <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-        <input class="form-control" name="publickey" v-model="base58.AccountPublicKey">
-      </div>
+        <label>Public key</label>
+        <div class="input-group">
+          <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+          <input class="form-control" name="publickey" v-model="base58.AccountPublicKey">
+        </div>
 
-      <label>Private key</label>
-      <div class="input-group">
-        <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-        <input readonly class="form-control" name="privatekey" v-model="base58.AccountPrivateKey">
-      </div> -->
-
-      <button type="submit" v-bind:class="'btn btn-primary btn-lg ' + loading">Complete!</button>
-    </form>
-
+        <label>Private key</label>
+        <div class="input-group">
+          <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+          <input readonly class="form-control" name="privatekey" v-model="base58.AccountPrivateKey">
+        </div> -->
+        <div class="row">
+          <div class="col-md-6">
+            <a v-bind:class="'btn btn-primary btn-lg fade-hover ' + loading" @click="validateSeed = !validateSeed">
+              <i class="fa fa-arrow-left" aria-hidden="true"></i> Back
+            </a>
+          </div>
+          <div class="col-md-6">
+            <button type="submit" v-bind:class="'btn btn-primary btn-lg fade-hover ' + loading">Submit!</button>
+          </div>
+        </div>
+      </form>
+    </transition>
     <!-- errors -->
     <div v-if=response class="text-red"><p>{{response}}</p></div>
   </div>
@@ -211,36 +226,3 @@ export default {
   */
 }
 </script>
-
-<style>
-html, body, .container-table {
-  height: 100%;
-  /*background-color: #282B30 !important;*/
-  background-color: white;
-}
-.container-table {
-    display: table;
-    color: white;
-}
-.vertical-center-row {
-    display: table-cell;
-    vertical-align: middle;
-}
-.vertical-20p {
-  padding-top: 20%;
-}
-.vertical-10p {
-  padding-top: 10%;
-}
-.logo {
-  width: 15em;
-  padding: 3em;
-}
-.loginForm .input-group {
-  padding-bottom: 1em;
-  height: 4em;
-}
-.input-group input {
-  height: 4em;
-}
-</style>

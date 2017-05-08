@@ -13,7 +13,14 @@
             </div>
           </div>
           <div class="box-body no-padding">
-          	<router-view></router-view>
+            <transition 
+              name="custom-classes-transition"
+              enter-active-class="animated fadeInUp"
+              leave-active-class="animated fadeOutDown"
+              mode="out-in"
+            >
+            	<router-view></router-view>
+            </transition>
           </div>
         </div>
       </div>

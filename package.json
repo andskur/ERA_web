@@ -13,6 +13,7 @@
     "deploy": "netlify deploy dist"
   },
   "dependencies": {
+    "animate.css": "^3.5.2",
     "axios": "^0.15.3",
     "babel-runtime": "^5.8.0",
     "chart.js": "2.3.0",

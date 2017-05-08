@@ -60,4 +60,10 @@ html, body, .container-table {
 .input-group input {
   height: 4em;
 }
+.fade-hover {
+  transition: all 0.3s ease 0s;
+}
+.fade-hover:hover {
+  background: #3071A9
+}
 </style>

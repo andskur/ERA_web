@@ -182,7 +182,12 @@
           <li class="active">{{$route.name}}</li>
         </ol>
       </section>
-      <transition name="slide-fade">
+      <transition 
+        name="custom-classes-transition"
+        enter-active-class="animated fadeIn"
+        leave-active-class="animated fadeOut"
+        mode="out-in"
+      >
         <router-view></router-view>
       </transition>
     </div>

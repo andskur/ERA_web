@@ -7,6 +7,9 @@ import VueRouter from 'vue-router'
 import Vueditor from 'vueditor'
 import 'vueditor/dist/css/vueditor.min.css'
 
+// animate.css
+import 'animate.css/animate.min.css'
+
 // Import Auth dep
 import axios from 'axios'
 import VueAxios from 'vue-axios'
@@ -45,9 +48,6 @@ var router = new VueRouter({
 Vue.router = router
 
 router.beforeEach((to, from, next) => {
-  // console.log(auth.checkAuth())
-  // console.log(window.localStorage.getItem('id_token'))
-  // console.log(to.meta)
   if (to.meta.auth) { // check the meta field
     if (auth.checkAuth()) {
       // console.log('auth')

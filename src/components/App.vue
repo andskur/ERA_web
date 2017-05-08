@@ -1,8 +1,6 @@
 <template>
   <div id="app">
-    <!-- <div v-if="this.$store.state.authenticated"> -->
-      <router-view></router-view>
-    <!-- </div> -->
+    <router-view></router-view>
   </div>
 </template>
 
@@ -13,7 +11,8 @@
       return {
         section: 'Head'
       }
-    },
+    }
+    /*
     methods: {
       logout () {
         this.$store.commit('SET_USER', null)
@@ -27,5 +26,6 @@
         this.$router.push('/login')
       }
     }
+    */
   }
 </script>

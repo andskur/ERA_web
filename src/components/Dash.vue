@@ -14,12 +14,18 @@
       <!-- Header Navbar -->
       <nav class="navbar navbar-static-top" role="navigation">
         <!-- Sidebar toggle button-->
-        <a href="javascript:;" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+        <a href="javascript:;"  data-toggle="modal" data-target="#formModal" role="button">
           <span class="sr-only">Toggle navigation</span>
         </a>
         <!-- Navbar Right Menu -->
         <div class="navbar-custom-menu">
           <ul class="nav navbar-nav">
+            <li>
+              <a href="javascript:;" @click="showSendModal = true">
+                Send
+                <i class="fa fa-share-square-o"></i>
+              </a>
+            </li>
             <!-- Status -->
             <li>
               <a>Wallet: <span>{{status.wallet}} </span>
@@ -197,6 +203,8 @@
     <footer class="main-footer">
       <strong>Copyright &copy; {{year}} <a href="https://aronicle.ru/">Aronicle</a>.</strong> All rights reserved.
     </footer>
+
+    <send v-if="showSendModal" @close="showSendModal = false"></send>
   </div>
   <!-- ./wrapper -->
 </template>
@@ -205,15 +213,19 @@
 import faker from 'faker'
 import { mapState } from 'vuex'
 import config from '../config'
-import Sidebar from './Sidebar'
 import axios from 'axios'
 import auth from '../auth'
 import 'hideseek'
 
+// components
+import Sidebar from './Sidebar'
+import Send from './modals/Send.vue'
+
 export default {
   name: 'Dash',
   components: {
-    Sidebar
+    Sidebar,
+    Send
   },
   data: function () {
     return {
@@ -227,6 +239,7 @@ export default {
         wallet: '',
         forging: ''
       },
+      showSendModal: false,
       error: ''
     }
   },

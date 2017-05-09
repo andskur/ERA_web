@@ -1,6 +1,5 @@
 ERA web interface
 
-
 Installation
 ------------
 

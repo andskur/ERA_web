@@ -28,13 +28,14 @@ module.exports = {
             pathRewrite: {
               '^/api': ''
           }
+        },
         '/lightwallet': {
             target: 'http://datachains.world:9067/lightwallet/',
             changeOrigin: true,
             pathRewrite: {
               '^/lightwallet': ''
           }
-      }
+        }
     },
     // CSS Sourcemaps off by default because relative paths are "buggy"
     // with this option, according to the CSS-Loader README

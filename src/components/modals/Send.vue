@@ -41,22 +41,24 @@
 </template>
 <script>
   import axios from 'axios'
+  import bs58 from 'bs58'
+  import nacl from 'tweetnacl'
 
   export default {
     name: 'SendModale',
     data: function () {
       return {
-        recipient: '',
-        amount: '',
+        recipient: '77QnJnSbS9EeGBa2LPZFZKVwjPwzeAxjmy',
+        amount: 0.0001,
         message: ''
       }
     },
     methods: {
       sendTransaction () {
-        const API_URL = 'http://datachains.world:9067/lightwallet/'
-        // let publickey = window.localStorage.getItem('publickey')
-        let publickey = '5mgpEGqUGpfme4W2tHJmG7Ew21Te2zNY7Ju3e9JfUmRF'
-        // let privatekey = console.log(window.localStorage.getItem('privatekey'))
+        const API_URL = 'http://localhost:8080/lightwallet/'
+        let publickey = window.localStorage.getItem('publickey')
+        // let publickey = '5mgpEGqUGpfme4W2tHJmG7Ew21Te2zNY7Ju3e9JfUmRF'
+        let privatekey = window.localStorage.getItem('privatekey')
         axios.get(API_URL + 'getraw/31/' + publickey, {
           params: {
             feePow: 2,
@@ -66,7 +68,49 @@
           }
         })
           .then(response => {
+            const buf1 = [31, 0, 0, 128, 0, 0, 1, 91, 144, 163, 185, 2]
+            const buf2 = Buffer.alloc(14)
+            const buf3 = Buffer.alloc(18)
+            const totalLength = buf1.length + buf2.length + buf3.length
+
+            // Prints: 42
+            console.log(totalLength)
+
+            var arraybuf = [buf1, buf2, buf3]
+            console.log(arraybuf)
+
+            const bufA = Buffer.concat(arraybuf, totalLength)
+
+            // Prints: <Buffer 00 00 00 00 ...>
+            console.log(bufA)
+
             console.log(response.data)
+            var byteMessage = bs58.decode(response.data)
+            var signature = nacl.sign(byteMessage, bs58.decode(privatekey))
+            var slice1 = byteMessage.slice(0, 53)
+            var slice2 = byteMessage.slice(53, byteMessage.length)
+            var buffers = [slice1, signature, slice2]
+            // console.log(buffers)
+            var totalLength2 = slice1.length + signature.length + slice2.length
+            // console.log(totalLength2)
+            var messageBuf = Buffer.concat(buffers, totalLength2)
+            console.log(messageBuf)
+            var endpoint = 'parse?data=' + bs58.encode(messageBuf)
+            // console.log(endpoint)
+            axios.get(API_URL + endpoint, {
+              params: {
+                feePow: 2,
+                recipient: this.recipient,
+                amount: this.amount,
+                key: 1
+              }
+            })
+              .then(response => {
+                console.log(response.data)
+              })
+              .catch(error => {
+                console.log('error', error.response)
+              })
           })
           .catch(error => {
             console.log('error', error.response)

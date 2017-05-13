@@ -54,12 +54,10 @@
         </div>
       </div>
     </div>
-
-    <div class="col-xs-12">
       <div class="box">
         <div class="box-header with-border">
           <h3 class="box-title"></h3>
-          <div class="box-body">
+          <div class="box-body row">
             <div class="col-sm-6 col-xs-12">
               <p class="text-center">
                 <strong>Transactions Volume Overview</strong>
@@ -76,7 +74,6 @@
           </div>
         </div>
       </div>
-    </div>
 
     <!-- Main row -->
     <!-- <div class="row">

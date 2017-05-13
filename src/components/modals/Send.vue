@@ -56,9 +56,56 @@
     methods: {
       sendTransaction () {
         const API_URL = 'http://localhost:8080/lightwallet/'
-        let publickey = window.localStorage.getItem('publickey')
-        // let publickey = '5mgpEGqUGpfme4W2tHJmG7Ew21Te2zNY7Ju3e9JfUmRF'
+        // const API_URL = 'http://185.146.168.226:9067/lightwallet/'
+        // let publickey = window.localStorage.getItem('publickey')
+        let publickey = '5mgpEGqUGpfme4W2tHJmG7Ew21Te2zNY7Ju3e9JfUmRF'
         let privatekey = window.localStorage.getItem('privatekey')
+
+        axios({
+          method: 'GET',
+          url: API_URL + 'getraw/31/' + publickey,
+          crossDomain: true,
+          headers: {'Access-Control-Allow-Origin': '*'},
+          withCredentials: true,
+          params: {
+            feePow: 2,
+            recipient: this.recipient,
+            amount: this.amount,
+            key: 1
+          }
+        })
+          .then(response => {
+            // console.log(response.statusText)
+            console.log(response.data)
+            // console.log(response.status)
+            // console.log(response.headers)
+            // console.log(response.config)
+            var byteMessage = bs58.decode(response.data)
+            var signature = nacl.sign(byteMessage, bs58.decode(privatekey))
+            var slice1 = byteMessage.slice(0, 53)
+            var slice2 = byteMessage.slice(53, byteMessage.length)
+            var buffers = [slice1, signature, slice2]
+            // console.log(buffers)
+            var totalLength2 = slice1.length + signature.length + slice2.length
+            // console.log(totalLength2)
+            var messageBuf = Buffer.concat(buffers, totalLength2)
+            console.log(messageBuf)
+            var endpoint = 'parse?data=' + bs58.encode(messageBuf)
+            console.log(endpoint)
+          })
+          .catch(error => {
+            if (error.response) {
+              console.log(error.response.data)
+              console.log(error.response.status)
+              console.log(error.response.headers)
+            } else if (error.request) {
+              console.log(error.request)
+            } else {
+              console.log('Error', error.message)
+            }
+            console.log(error.config)
+          })
+        /*
         axios.get(API_URL + 'getraw/31/' + publickey, {
           params: {
             feePow: 2,
@@ -115,12 +162,13 @@
           .catch(error => {
             console.log('error', error.response)
           })
+          */
       }
     }
   }
 </script>
 <style>
-  .modal-mask {
+.modal-mask {
   position: fixed;
   z-index: 9998;
   top: 0;
@@ -160,15 +208,6 @@
 .modal-default-button {
   float: right;
 }
-
-/*
- * The following styles are auto-applied to elements with
- * transition="modal" when their visibility is toggled
- * by Vue.js.
- *
- * You can easily play with the modal transition by editing
- * these styles.
- */
 
 .modal-enter {
   opacity: 0;

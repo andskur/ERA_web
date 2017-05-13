@@ -30,7 +30,7 @@ module.exports = {
           }
         },
         '/lightwallet': {
-            target: 'http://datachains.world:9067/lightwallet/',
+            target: 'http://185.146.168.226:9067/lightwallet',
             changeOrigin: true,
             pathRewrite: {
               '^/lightwallet': ''

@@ -75,7 +75,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+// import axios from 'axios'
 // import api from '../../api'
 // var SHA256 = require('../../libs/sha256.js')
 // import SHA256 from '../../libs/sha256.js'
@@ -84,10 +84,13 @@ import axios from 'axios'
 // import qora from '../../libs/qora.js'
 // require('../../libs/qora.js')
 
-// import crypto from '../../crypto/index.js'
+import crypto from '../../crypto/index.js'
 import auth from '../../auth'
+// import nacl from 'tweetnacl'
+import randomWords from 'random-words'
+import bs58 from 'bs58'
 
-const serverURI = 'http://localhost:8080/api/'
+// const serverURI = 'http://localhost:8080/api/'
 
 export default {
   name: 'New',
@@ -137,6 +140,7 @@ export default {
       return
     },
     generate58Seed () {
+      /*
       axios.get(serverURI + 'seed')
         .then((response) => {
           var seed = response.data.seed
@@ -146,14 +150,22 @@ export default {
       .catch(function (error) {
         console.log(error)
       })
+      */
+      var passphrase = randomWords({ exactly: 12, join: ' ' })
+      console.log(passphrase)
+      var seed = crypto.generateSeed(passphrase)
+      console.log(seed)
+      this.seed = seed
     },
     checkSeed () {
       this.toggleLoading()
       let seed58 = this.seed
-      if (!seed58) {
+      let byteseeed = bs58.decode(seed58)
+      if (!seed58 || byteseeed.length !== 32) {
         this.response = 'invalid seed!'
         this.toggleLoading()
         console.log(this.response)
+        this.validateSeed = false
         return
       }
 

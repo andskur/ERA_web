@@ -13,8 +13,8 @@ export default {
     AccountAddress: ''
   },
 
-  generateSeed (password) {
-    var byteSeed = new Uint8Array(SHA256.digest(SHA256.digest(password)))
+  generateSeed (passphrase) {
+    var byteSeed = new Uint8Array(SHA256.digest(SHA256.digest(passphrase)))
     var base58BaseSeed = Base58.encode(byteSeed)
 
     this.accountSeed = base58BaseSeed

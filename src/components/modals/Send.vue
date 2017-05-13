@@ -7,8 +7,9 @@
             <div class="modal-header">
               <button type="button" class="close" @click="$emit('close')" aria-label="Close"><span aria-hidden="true">&times;</span></button>
               <h4 class="modal-title">Send Transaction</h4>
+              <h5 v-if="response.status">Status: <span class="text-success">{{response.status}}</span></h5>
             </div>
-            <div class="modal-body">
+            <div v-if="!response.data" class="modal-body">
               <div class="input-group">
                 <span class="input-group-addon">
                   <i class="fa fa-fw fa-user" aria-hidden="true"></i>
@@ -28,8 +29,10 @@
                 <textarea class="form-control" name="message" v-model="message" placeholder="message..."></textarea>
                 <!-- <span class="input-group-addon">.00</span> -->
               </div>
+              <h5 v-if="error">Error: <span class="text-danger">{{error}}</span></h5>
             </div>
-            <div class="modal-footer">
+            <div v-else class="modal-body">{{response.data}}</div>
+            <div v-if="!response.data" class="modal-footer">
               <button type="button" class="btn btn-default" @click="$emit('close')">Cancel</button>
               <button type="button" class="btn btn-primary" @click="sendTransaction()">Send transaction <i class="fa fa-paper-plane-o"></i></button>
             </div>
@@ -50,15 +53,20 @@
       return {
         recipient: '77QnJnSbS9EeGBa2LPZFZKVwjPwzeAxjmy',
         amount: 0.0001,
-        message: ''
+        message: '',
+        response: {
+          status: '',
+          data: ''
+        },
+        error: ''
       }
     },
     methods: {
       sendTransaction () {
         const API_URL = 'http://localhost:8080/lightwallet/'
         // const API_URL = 'http://185.146.168.226:9067/lightwallet/'
-        // let publickey = window.localStorage.getItem('publickey')
-        let publickey = '5mgpEGqUGpfme4W2tHJmG7Ew21Te2zNY7Ju3e9JfUmRF'
+        let publickey = window.localStorage.getItem('publickey')
+        // let publickey = '5mgpEGqUGpfme4W2tHJmG7Ew21Te2zNY7Ju3e9JfUmRF'
         let privatekey = window.localStorage.getItem('privatekey')
 
         axios({
@@ -71,98 +79,65 @@
             feePow: 2,
             recipient: this.recipient,
             amount: this.amount,
+            message: this.message,
             key: 1
           }
         })
           .then(response => {
             // console.log(response.statusText)
-            console.log(response.data)
+            // console.log(response.data)
             // console.log(response.status)
             // console.log(response.headers)
             // console.log(response.config)
             var byteMessage = bs58.decode(response.data)
-            var signature = nacl.sign(byteMessage, bs58.decode(privatekey))
+            var signature = new Buffer(nacl.sign(byteMessage, bs58.decode(privatekey)))
             var slice1 = byteMessage.slice(0, 53)
             var slice2 = byteMessage.slice(53, byteMessage.length)
             var buffers = [slice1, signature, slice2]
-            // console.log(buffers)
-            var totalLength2 = slice1.length + signature.length + slice2.length
-            // console.log(totalLength2)
-            var messageBuf = Buffer.concat(buffers, totalLength2)
-            console.log(messageBuf)
-            var endpoint = 'parse?data=' + bs58.encode(messageBuf)
-            console.log(endpoint)
+            var messageBuf = Buffer.concat(buffers)
+            // console.log(messageBuf)
+            var message58 = bs58.encode(messageBuf)
+            // console.log(message58)
+            var endpoint = 'parse?data=' + message58
+
+            axios.get(API_URL + endpoint)
+              .then(response => {
+                console.log(response.statusText)
+                this.response.status = response.statusText
+                console.log(response.data)
+                this.response.data = response.data
+              })
+              .catch(error => {
+                if (error.response) {
+                  console.log(error.response.data)
+                  console.log(error.response.status)
+                  console.log(error.response.headers)
+                  this.error = error.response.data
+                } else if (error.request) {
+                  console.log(error.request)
+                  this.error = error.request
+                } else {
+                  console.log('Error', error.message)
+                  this.error = error.message
+                }
+                console.log(error.config)
+              })
           })
           .catch(error => {
             if (error.response) {
               console.log(error.response.data)
               console.log(error.response.status)
               console.log(error.response.headers)
+              this.error = error.response.data
             } else if (error.request) {
               console.log(error.request)
+              this.error = error.request
             } else {
               console.log('Error', error.message)
+              this.error = error.message
             }
             console.log(error.config)
           })
-        /*
-        axios.get(API_URL + 'getraw/31/' + publickey, {
-          params: {
-            feePow: 2,
-            recipient: this.recipient,
-            amount: this.amount,
-            key: 1
-          }
-        })
-          .then(response => {
-            const buf1 = [31, 0, 0, 128, 0, 0, 1, 91, 144, 163, 185, 2]
-            const buf2 = Buffer.alloc(14)
-            const buf3 = Buffer.alloc(18)
-            const totalLength = buf1.length + buf2.length + buf3.length
-
-            // Prints: 42
-            console.log(totalLength)
-
-            var arraybuf = [buf1, buf2, buf3]
-            console.log(arraybuf)
-
-            const bufA = Buffer.concat(arraybuf, totalLength)
-
-            // Prints: <Buffer 00 00 00 00 ...>
-            console.log(bufA)
-
-            console.log(response.data)
-            var byteMessage = bs58.decode(response.data)
-            var signature = nacl.sign(byteMessage, bs58.decode(privatekey))
-            var slice1 = byteMessage.slice(0, 53)
-            var slice2 = byteMessage.slice(53, byteMessage.length)
-            var buffers = [slice1, signature, slice2]
-            // console.log(buffers)
-            var totalLength2 = slice1.length + signature.length + slice2.length
-            // console.log(totalLength2)
-            var messageBuf = Buffer.concat(buffers, totalLength2)
-            console.log(messageBuf)
-            var endpoint = 'parse?data=' + bs58.encode(messageBuf)
-            // console.log(endpoint)
-            axios.get(API_URL + endpoint, {
-              params: {
-                feePow: 2,
-                recipient: this.recipient,
-                amount: this.amount,
-                key: 1
-              }
-            })
-              .then(response => {
-                console.log(response.data)
-              })
-              .catch(error => {
-                console.log('error', error.response)
-              })
-          })
-          .catch(error => {
-            console.log('error', error.response)
-          })
-          */
       }
     }
   }
@@ -221,5 +196,8 @@
 .modal-leave-active .modal-container {
   -webkit-transform: scale(1.1);
   transform: scale(1.1);
+}
+textarea {
+  max-width: 100%;
 }
 </style>

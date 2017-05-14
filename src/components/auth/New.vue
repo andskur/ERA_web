@@ -100,7 +100,8 @@ export default {
         var wallet = auth.createWallet(this.seed, this.password, wallets.length)
         this.$store.commit('ADD_WALLET', wallet)
         window.localStorage.setItem('wallets', JSON.stringify(wallets))
-        this.$store.commit('SET_activeWallet', wallet.id)
+        this.$store.commit('SET_activeWallet', wallet)
+        window.localStorage.setItem('activeWallet', JSON.stringify(wallet))
         console.log(this.$store.state.activeWallet)
         this.$router.push('/')
       }

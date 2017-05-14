@@ -86,12 +86,17 @@ if (window.localStorage) {
   var idToken = window.localStorage.getItem('id_token')
   var accessToken = window.localStorage.getItem('access_token')
   var wallets = JSON.parse(window.localStorage.getItem('wallets'))
+  var activeWallet = JSON.parse(window.localStorage.getItem('activeWallet'))
 
   if (store.state.wallets !== wallets && wallets != null) {
     store.commit('SYNC_WALLETS', wallets)
   }
-  console.log(window.localStorage.getItem('wallets'))
+
+  if (store.state.activeWallet !== activeWallet && activeWallet != null) {
+    store.commit('SET_activeWallet', activeWallet)
+  }
   console.log(store.state.wallets)
+  console.log(store.state.activeWallet)
 
   if (store.state.jwt.idToken !== idToken) {
     store.commit('SET_idToken', idToken)

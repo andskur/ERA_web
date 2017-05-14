@@ -65,9 +65,11 @@
       sendTransaction () {
         const API_URL = 'http://localhost:8080/lightwallet/'
         // const API_URL = 'http://185.146.168.226:9067/lightwallet/'
-        let publickey = window.localStorage.getItem('publickey')
+        // let publickey = window.localStorage.getItem('publickey')
+        let publickey = this.$store.state.activeWallet.keys.public
         // let publickey = '5mgpEGqUGpfme4W2tHJmG7Ew21Te2zNY7Ju3e9JfUmRF'
-        let privatekey = window.localStorage.getItem('privatekey')
+        // let privatekey = window.localStorage.getItem('privatekey')
+        let privatekey = this.$store.state.activeWallet.keys.private
 
         axios({
           method: 'GET',

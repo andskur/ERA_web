@@ -76,7 +76,6 @@
           url: API_URL + 'getraw/31/' + publickey,
           crossDomain: true,
           headers: {'Access-Control-Allow-Origin': '*'},
-          withCredentials: true,
           params: {
             feePow: 2,
             recipient: this.recipient,

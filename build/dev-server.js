@@ -3,6 +3,7 @@ var config = require('../config')
 if (!process.env.NODE_ENV) process.env.NODE_ENV = config.dev.env
 var path = require('path')
 var express = require('express')
+var cors = require('cors')
 var webpack = require('webpack')
 var opn = require('opn')
 var proxyMiddleware = require('http-proxy-middleware')
@@ -17,6 +18,7 @@ var port = process.env.PORT || config.dev.port
 var proxyTable = config.dev.proxyTable
 
 var app = express()
+app.use(cors())
 var compiler = webpack(webpackConfig)
 
 var devMiddleware = require('webpack-dev-middleware')(compiler, {

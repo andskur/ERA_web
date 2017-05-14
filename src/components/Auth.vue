@@ -2,7 +2,9 @@
   <div class="container container-table">
       <div class="row vertical-3p">
         <div class="container">
-          <img src="/static/img/logo.png" class="center-block logo">
+          <!-- <router-link to="/"> -->
+            <img src="/static/img/logo.png" class="center-block logo">
+          <!-- </router-link> -->
           <div class="text-center col-md-4 col-sm-offset-4">
             <!-- auth form -->
             <router-view></router-view>
@@ -57,7 +59,7 @@ html, body, .container-table {
   padding-bottom: 1em;
   height: 4em;
 }
-.input-group input {
+.input-group input, .input-group select {
   height: 4em;
 }
 .fade-hover {

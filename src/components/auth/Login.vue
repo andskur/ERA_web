@@ -4,9 +4,17 @@
     <!-- <button v-on:click="testAuth">check</button> -->
     <!-- <form class="ui form loginForm"  @submit.prevent="loginWallet"> -->
     <div class="ui form loginForm">
-      <div class="input-group">
+      <!-- <div class="input-group">
         <span class="input-group-addon"><i class="fa fa-certificate"></i></span>
         <input class="form-control" name="seed" placeholder="Seed" type="text" v-model="credentials.seed">
+      </div> -->
+      <div class="input-group">
+        <span class="input-group-addon"><i class="fa fa-certificate"></i></span>
+        <select class="form-control" v-model="credentials.seed">
+          <option v-for="wallet in wallets" v-bind:value="wallet.id">
+            {{wallet.seed}}
+          </option>
+        </select>
       </div>
 
       <!-- errors -->
@@ -51,6 +59,11 @@ export default {
         password: ''
       },
       response: ''
+    }
+  },
+  computed: {
+    wallets () {
+      return this.$store.state.wallets
     }
   },
   methods: {

@@ -315,7 +315,7 @@ export default {
     },
     logout () {
       auth.logout()
-      this.$stor.state.commit('RESET_WALLET')
+      this.$store.commit('RESET_WALLET')
       this.$router.push('/auth')
     },
     changeloading () {

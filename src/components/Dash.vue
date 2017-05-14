@@ -280,7 +280,7 @@ export default {
             status = 'Error'
             break
         }
-        console.log('wallet status: ' + status)
+        // console.log('wallet status: ' + status)
         this.status.wallet = status
       })
       .catch(function (error) {
@@ -306,7 +306,7 @@ export default {
             status = 'Error'
             break
         }
-        console.log('forging status: ' + status)
+        // console.log('forging status: ' + status)
         this.status.forging = status
       })
       .catch(function (error) {

@@ -66,31 +66,6 @@ export default {
       auth.login(this, credentials)
 
       this.$router.push('/')
-      /*
-      this.$auth.login({
-        // url: '/api/wallet/unlock',
-        // redirect: '/',
-        headers: {
-          seed: this.seed,
-          password: this.password
-        },
-        rememberMe: true,
-        redirect: '/',
-        fetchUser: false,
-        success: function (res) {
-          console.log('success ' + this.context)
-          window.localStorage.setItem('auth-token', res.token)
-          // console.log(this.localStorage.getItem('auth-token'))
-          // console.log(res)
-          // console.log(this.options.http._getHeaders)
-        },
-        error: function (res) {
-          console.log('error ' + this.context)
-          this.response = res.data
-        }
-      })
-      */
-      // console.log(this.$auth.user())
     },
     checkCreds () {
       const {seed, password} = this

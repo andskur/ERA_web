@@ -64,6 +64,7 @@ router.beforeEach((to, from, next) => {
 
 sync(store, router)
 
+// wysiwyg editor config
 Vue.use(Vueditor, {
   fontName: [
     {val: 'arial black'}, {val: 'times new roman'}, {val: 'Courier New'}
@@ -81,14 +82,22 @@ new Vue({
 })
 
 // Check local storage to handle refreshes
-/*
 if (window.localStorage) {
-  var localUserString = window.localStorage.getItem('user') || 'null'
-  var localUser = JSON.parse(localUserString)
+  var idToken = window.localStorage.getItem('id_token')
+  var accessToken = window.localStorage.getItem('access_token')
+  var wallets = JSON.parse(window.localStorage.getItem('wallets'))
 
-  if (localUser && store.state.user !== localUser) {
-    store.commit('SET_USER', localUser)
-    store.commit('SET_TOKEN', window.localStorage.getItem('token'))
+  if (store.state.wallets !== wallets && wallets != null) {
+    store.commit('SYNC_WALLETS', wallets)
   }
+  console.log(window.localStorage.getItem('wallets'))
+  console.log(store.state.wallets)
+
+  if (store.state.jwt.idToken !== idToken) {
+    store.commit('SET_idToken', idToken)
+    store.commit('SET_accessToken', accessToken)
+  }
+  // console.log(store.state.user)
+} else {
+  console.log(false)
 }
-*/

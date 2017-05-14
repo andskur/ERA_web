@@ -18,7 +18,7 @@
           <span class="input-group-addon"><i class="fa fa-certificate"></i></span>
           <input readonly class="form-control" name="seed" placeholder="Base 58 Seed" type="text" v-model="seed">
         </div>
-
+        <a v-bind:class="'btn btn-primary btn-lg fade-hover ' + loading" @click="generate58Seed">New Seed</a>
         <button type="submit" v-bind:class="'btn btn-primary btn-lg hvr-icon-forward fade-hover ' + loading">Next 
           <!-- <i class="fa fa-arrow-right" aria-hidden="true"></i> -->
         </button>
@@ -39,24 +39,6 @@
           <span class="input-group-addon"><i class="fa fa-lock"></i></span>
           <input class="form-control" name="password" placeholder="Repeat your password" type="password" v-model="repeatpassword">
         </div>
-
-        <!-- <label>Account address</label>
-        <div class="input-group">
-          <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-          <input class="form-control" name="address" placeholder="Seed" v-model="base58.AccountAddress">
-        </div>
-
-        <label>Public key</label>
-        <div class="input-group">
-          <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-          <input class="form-control" name="publickey" v-model="base58.AccountPublicKey">
-        </div>
-
-        <label>Private key</label>
-        <div class="input-group">
-          <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-          <input readonly class="form-control" name="privatekey" v-model="base58.AccountPrivateKey">
-        </div> -->
         <div class="row">
           <div class="col-md-6">
             <a v-bind:class="'btn btn-primary btn-lg fade-hover ' + loading" @click="validateSeed = !validateSeed">
@@ -95,69 +77,62 @@ import bs58 from 'bs58'
 export default {
   name: 'New',
   data (router) {
-    /*
     return {
-      section: 'New',
-      loading: '',
-      seed: '',
-      password: '',
-      accountSeed: '',
-      keyPair: '',
-      base58: {
-        addressSeed: '',
-        AccountSeed: '',
-        AccountPublicKey: '',
-        AccountPrivateKey: '',
-        AccountAddress: ''
-      },
-      response: ''
-    }
-    */
-    return {
-      section: 'New',
       loading: '',
       seed: '',
       validateSeed: '',
       repeatseed: '',
-      password: '',
-      repeatpassword: '',
-      keys: '',
+      password: '2327901',
+      repeatpassword: '2327901',
       response: ''
     }
   },
   created () {
-    this.toggleLoading()
     this.generate58Seed()
   },
   methods: {
     createWallet () {
+      this.resetResponse()
       this.toggleLoading()
       if (this.validateWallet()) {
-        auth.signup(this.seed, this.password)
+        // Create and add wallet to wallets store
+        var wallets = this.$store.state.wallets
+        var wallet = auth.createWallet(this.seed, this.password, wallets.length)
+        this.$store.commit('ADD_WALLET', wallet)
+        window.localStorage.setItem('wallets', JSON.stringify(wallets))
+        this.$store.commit('SET_activeWallet', wallet.id)
+        console.log(this.$store.state.activeWallet)        
         this.$router.push('/')
       }
-      // this.response = 'ivalid wallet!'
+      this.response = 'ivalid wallet!'
       return
     },
     generate58Seed () {
+      this.resetResponse()
+      this.toggleLoading()
       /*
       axios.get(serverURI + 'seed')
         .then((response) => {
-          var seed = response.data.seed
-          // console.log(seed)
-          this.seed = seed
+          var seedApi = response.data.seed
+          console.log('Seed from api lenght: ' + seedApi.length + ' - ' + seedApi)
+          // console.log('Length: ' + seedApi.length)
+          // this.seed = seed
         })
       .catch(function (error) {
         console.log(error)
       })
       */
       var passphrase = randomWords({ exactly: 12, join: ' ' })
-      console.log(passphrase)
+      // console.log(passphrase)
       var seed = crypto.generateSeed(passphrase)
-      console.log(seed)
+      // console.log('Seed from lib lenght: ' + seed.length + ' - ' + seed)
+      // console.log('Length: ' + seed.length)
       this.seed = seed
+
+      this.repeatseed = seed
     },
     checkSeed () {
+      this.resetResponse()
       this.toggleLoading()
       let seed58 = this.seed
       let byteseeed = bs58.decode(seed58)
@@ -170,8 +145,6 @@ export default {
       }
 
       this.validateSeed = true
-      // console.log(crypto.createAddressSeed(seed58))
-      // this.keys = crypto.generateKeys(seed58)
     },
     validateWallet () {
       this.resetResponse()
@@ -185,29 +158,6 @@ export default {
       }
       return true
     },
-    /*
-    doAccountFromSeed (base58AccountSeed) {
-      if (base58AccountSeed) {
-        this.base58.AccountSeed = base58AccountSeed
-      } else {
-        base58AccountSeed = this.base58.AccountSeed
-      }
-
-      if (Base58.decode(base58AccountSeed).length !== 32) {
-        this.base58.AccountPublicKey = ''
-        this.base58.AccountPrivateKey = ''
-        this.base58.AccountAddress = ''
-        this.response = 'invalid seed!'
-        return
-      }
-
-      this.keyPair = qora.getKeyPairFromSeed(base58AccountSeed, false)
-      this.base58.AccountAddress = qora.getAccountAddressFromPublicKey(this.keyPair.publicKey)
-
-      this.base58.AccountPublicKey = Base58.encode(this.keyPair.publicKey)
-      this.base58.AccountPrivateKey = Base58.encode(this.keyPair.privateKey)
-    },
-    */
     toggleLoading () {
       this.loading = (this.loading === '') ? 'loading' : ''
     },

@@ -1,12 +1,10 @@
 import axios from 'axios'
-
-// const API_URL = 'http://localhost:3001/'
-// const LOGIN_URL = API_URL + 'sessions/create/'
-// const SIGNUP_URL = API_URL + 'users/'
-const API_URL = 'http://localhost:8080/api/'
+// import nacl from 'tweetnacl'
 
 import token from './token.js'
 import crypto from '../crypto/index.js'
+
+const API_URL = 'http://localhost:8080/api/'
 
 export default {
 
@@ -80,19 +78,33 @@ export default {
     */
   },
 
-  signup (seed, password) {
+  createWallet (seed, password, walletsCount) {
     crypto.generateKeys(seed)
 
+    // create keypair
     var privatekey = crypto.base58.AccountPrivateKey
     var publickey = crypto.base58.AccountPublicKey
 
+    // create jwt
     window.localStorage.setItem('id_token', token.createIdToken(seed, privatekey))
     window.localStorage.setItem('access_token', token.createAccessToken(privatekey))
-    window.localStorage.setItem('privatekey', privatekey)
-    window.localStorage.setItem('publickey', publickey)
 
-    axios.defaults.headers.common['Authorization'] = 'Bearer' + window.localStorage.getItem('access_token')
-    this.user.authenticated = true
+    var wallet = {
+      id: walletsCount + 1,
+      seed: seed,
+      password: password,
+      keys: {
+        private: privatekey,
+        public: publickey
+      }
+    }
+
+    return wallet
+
+    // window.localStorage.setItem('privatekey', privatekey)
+    // window.localStorage.setItem('publickey', publickey)
+
+    // axios.defaults.headers.common['Authorization'] = 'Bearer' + window.localStorage.getItem('access_token')
 
     /*
     axios.post(API_URL + 'wallet', {

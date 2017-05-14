@@ -101,7 +101,7 @@ export default {
         this.$store.commit('ADD_WALLET', wallet)
         window.localStorage.setItem('wallets', JSON.stringify(wallets))
         this.$store.commit('SET_activeWallet', wallet.id)
-        console.log(this.$store.state.activeWallet)        
+        console.log(this.$store.state.activeWallet)
         this.$router.push('/')
       }
       this.response = 'ivalid wallet!'

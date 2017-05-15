@@ -70,3 +70,11 @@ module.exports = app.listen(port, function (err) {
   console.log('Listening at ' + uri + '\n')
   opn(uri)
 })
+
+process.on('SIGTERM', function () {
+  if (server === undefined) return;
+  server.close(function () {
+    // Disconnect from cluster master
+    process.disconnect && process.disconnect();
+  });
+});

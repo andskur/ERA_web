@@ -59,7 +59,7 @@ html, body, .container-table {
   padding-bottom: 1em;
   height: 4em;
 }
-.input-group input, .input-group select {
+.input-large input, .input-large select {
   height: 4em;
 }
 .fade-hover {

@@ -27,7 +27,7 @@
               </a>
             </li>
             <!-- Status -->
-            <li>
+            <!-- <li>
               <a>Wallet: <span>{{status.wallet}} </span>
                 <i v-if="status.wallet === 'Up to date'" class="fa fa-circle text-success"></i>
                 <i v-else-if="status.wallet === 'Synchronizing'" class="fa fa-circle text-yellow"></i>
@@ -39,7 +39,7 @@
                 <i v-if="status.forging === 'Enabled'" class="fa fa-circle text-success"></i>
                 <i v-else class="fa fa-circle text-danger"></i>
               </a>
-            </li>
+            </li> -->
             <!-- Messages-->
             <li class="dropdown messages-menu">
               <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
@@ -136,19 +136,27 @@
             <!-- User Account Menu -->
             <li class="dropdown user user-menu">
               <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
-                <img v-bind:src="demo.avatar" class="user-image" alt="User Image">
-                <span class="hidden-xs">{{ demo.displayName }}</span>
+                <div v-if="person">
+                  <img v-bind:src="demo.avatar" class="user-image" alt="User Image">
+                  <span class="hidden-xs">{{ demo.displayName }}</span>
+                </div>
+                <div v-else>
+                  <i class="fa fa-user"></i> Anonim
+                </div>
               </a>
               <ul class="dropdown-menu shadow-3">
                 <!-- User image -->
-                <li class="user-header">
+                <li v-if="person" class="user-header">
                   <img v-bind:src="demo.avatar" class="img-circle" alt="User Image">
                   <p>{{ demo.displayName }}</p>
                 </li>
                 <li class="user-footer">
                   <div class="pull-left">
-                    <a @click="" href="javascript:;" class="btn btn-default btn-flat">
-                      <i class="fa fa-user" aria-hidden="true"></i> Profile
+                    <a v-if="person" @click="" href="javascript:;" class="btn btn-default btn-flat">
+                      <i class="fa fa-user" aria-hidden="true"></i> Person
+                    </a>
+                    <a v-else @click="showAddPersonModal = true" href="javascript:;" class="btn btn-default btn-flat">
+                      <i class="fa fa-user-plus" aria-hidden="true"></i> Add person
                     </a>
                   </div>
                   <div class="pull-right">
@@ -205,6 +213,7 @@
     </footer>
 
     <send v-if="showSendModal" @close="showSendModal = false"></send>
+    <AddPerson v-if="showAddPersonModal" @close="showAddPersonModal = false"></AddPerson>
   </div>
   <!-- ./wrapper -->
 </template>
@@ -219,13 +228,16 @@ import 'hideseek'
 
 // components
 import Sidebar from './Sidebar'
+// mmodals
 import Send from './modals/Send.vue'
+import AddPerson from './modals/AddPerson.vue'
 
 export default {
   name: 'Dash',
   components: {
     Sidebar,
-    Send
+    Send,
+    AddPerson
   },
   data: function () {
     return {
@@ -240,6 +252,7 @@ export default {
         forging: ''
       },
       showSendModal: false,
+      showAddPersonModal: false,
       error: ''
     }
   },
@@ -249,7 +262,8 @@ export default {
   },
   computed: {
     ...mapState([
-      'userInfo'
+      'userInfo',
+      'person'
     ]),
     demo () {
       return {
@@ -377,5 +391,67 @@ hr.visible-xs-block {
 
 .shadow-3 {
   box-shadow: 0 0 5px black;
+}
+.modal-mask {
+  position: fixed;
+  z-index: 9998;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, .5);
+  display: table;
+  transition: opacity .3s ease;
+}
+
+.modal-wrapper {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.modal-container {
+  width: 300px;
+  margin: 0px auto;
+  padding: 20px 30px;
+  background-color: #fff;
+  border-radius: 2px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
+  transition: all .3s ease;
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+.modal-header h3 {
+  margin-top: 0;
+  color: #42b983;
+}
+
+.modal-body {
+  margin: 20px 0;
+}
+
+.modal-default-button {
+  float: right;
+}
+
+.modal-enter {
+  opacity: 0;
+}
+
+.modal-leave-active {
+  opacity: 0;
+}
+
+.modal-enter .modal-container,
+.modal-leave-active .modal-container {
+  -webkit-transform: scale(1.1);
+  transform: scale(1.1);
+}
+textarea {
+  max-width: 100%;
+}
+
+// place autocomplete container
+.pac-container {
+  z-index: 10000;
 }
 </style>

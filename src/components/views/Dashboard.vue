@@ -6,7 +6,7 @@
           {{ address }}
         </li>
       </ul> -->
-      <div class="alert alert-success alert-dismissible">
+      <div v-if="!person" class="alert alert-success alert-dismissible">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
         <h4><i class="icon fa fa-check"></i> Welcome to ERA blockchain platform!</h4>
       </div>
@@ -152,6 +152,7 @@
 <script>
 import Chart from 'chart.js'
 import axios from 'axios'
+import { mapState } from 'vuex'
 
 // import api from '../../api'
 
@@ -214,6 +215,9 @@ export default {
       })
   },
   computed: {
+    ...mapState([
+      'person'
+    ]),
     allTransactions () {
       return this.generateRandomNumbers(12, 1000000, 10000)
     },

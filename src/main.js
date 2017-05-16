@@ -7,6 +7,9 @@ import VueRouter from 'vue-router'
 import Vueditor from 'vueditor'
 import 'vueditor/dist/css/vueditor.min.css'
 
+// Google maps
+// import * as VueGoogleMaps from 'vue2-google-maps'
+
 // animate.css
 import 'animate.css/animate.min.css'
 
@@ -71,6 +74,15 @@ Vue.use(Vueditor, {
   ],
   lang: 'en'
 })
+
+// Google maps config
+/*
+Vue.use(VueGoogleMaps, {
+  load: {
+    key: 'AIzaSyAFCd69kP2HpYhNIfAcLibYb3GknFKq-rI'
+  }
+})
+*/
 
 // Start out app!
 // eslint-disable-next-line no-new

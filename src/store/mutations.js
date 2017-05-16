@@ -22,5 +22,8 @@ export default {
   },
   RESET_WALLET (state) {
     state.activeWallet = null
+  },
+  ADD_PERSON (state, person) {
+    state.person = person
   }
 }

@@ -14,7 +14,7 @@
         </div> -->
 
         <h4 class="animated infinite bounce">Remember your seed! </h4>
-        <div class="input-group">
+        <div class="input-group input-large">
           <span class="input-group-addon"><i class="fa fa-certificate"></i></span>
           <input readonly class="form-control" name="seed" placeholder="Base 58 Seed" type="text" v-model="seed">
         </div>
@@ -25,17 +25,17 @@
       </form>
       <form v-else class="ui form loginForm" @submit.prevent="createWallet" key="seed_submit">
 
-        <div class="input-group" v-bind:class="{ 'has-error': repeatseed !== seed}">
+        <div class="input-group input-large" v-bind:class="{ 'has-error': repeatseed !== seed}">
           <span class="input-group-addon"><i class="fa fa-certificate"></i></span>
           <input class="form-control" name="seed" placeholder="Repeat your seed" type="text" v-model="repeatseed">
         </div>
 
-        <div class="input-group" v-bind:class="{ 'has-error': password < 8}">
+        <div class="input-group input-large" v-bind:class="{ 'has-error': password < 8}">
           <span class="input-group-addon"><i class="fa fa-lock"></i></span>
           <input class="form-control" name="password" placeholder="Password" type="password" v-model="password">
         </div>
 
-        <div class="input-group" v-bind:class="{ 'has-error': repeatpassword !== password}">
+        <div class="input-group input-large" v-bind:class="{ 'has-error': repeatpassword !== password}">
           <span class="input-group-addon"><i class="fa fa-lock"></i></span>
           <input class="form-control" name="password" placeholder="Repeat your password" type="password" v-model="repeatpassword">
         </div>
@@ -82,8 +82,8 @@ export default {
       seed: '',
       validateSeed: '',
       repeatseed: '',
-      password: '2327901',
-      repeatpassword: '2327901',
+      password: '',
+      repeatpassword: '',
       response: ''
     }
   },
@@ -129,8 +129,6 @@ export default {
       // console.log('Seed from lib lenght: ' + seed.length + ' - ' + seed)
       // console.log('Length: ' + seed.length)
       this.seed = seed
-
-      this.repeatseed = seed
     },
     checkSeed () {
       this.resetResponse()

@@ -6,12 +6,13 @@
 
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel">
-        <div class="pull-left image">
+        <div v-if="person" class="pull-left image">
           <img :src="pictureUrl" />
         </div>
         <div class="pull-left info">
           <div>
-            <p class="white">{{ displayName }}</p>
+            <p v-if="person" class="white">{{ displayName }}</p>
+            <p v-else class="white">Anonim</p>
           </div>
           <a href="javascript:;">
             <i class="fa fa-circle text-success"></i> Connected
@@ -48,11 +49,17 @@
 </template>
 <script>
 import SidebarMenu from './SidebarMenu'
+import { mapState } from 'vuex'
 
 export default {
   name: 'Sidebar',
   props: ['displayName', 'pictureUrl'],
-  components: { SidebarMenu }
+  components: { SidebarMenu },
+  computed: {
+    ...mapState([
+      'person'
+    ])
+  }
 }
 </script>
 <style>

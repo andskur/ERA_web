@@ -7,6 +7,7 @@ export default {
     accessToken: null
   },
   wallets: [],
+  person: null,
   activeWallet: null,
   userInfo: {
     messages: [{1: 'test', 2: 'test'}],

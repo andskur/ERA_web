@@ -8,7 +8,7 @@
         <span class="input-group-addon"><i class="fa fa-certificate"></i></span>
         <input class="form-control" name="seed" placeholder="Seed" type="text" v-model="credentials.seed">
       </div> -->
-      <div class="input-group">
+      <div class="input-group input-large">
         <span class="input-group-addon"><i class="fa fa-certificate"></i></span>
         <select class="form-control" v-model="credentials.seed">
           <option v-for="wallet in wallets" v-bind:value="wallet.id">
@@ -20,7 +20,7 @@
       <!-- errors -->
       <div v-if=response class="text-red"><p>{{response}}</p></div>
       
-      <div class="input-group">
+      <div class="input-group input-large">
         <span class="input-group-addon"><i class="fa fa-lock"></i></span>
         <input class="form-control" name="password" placeholder="Password" type="password" v-model="credentials.password">
       </div>

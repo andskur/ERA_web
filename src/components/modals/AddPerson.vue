@@ -154,21 +154,21 @@
         person58: '',
         tomail: '',
         person: {
-          name: 'test',
-          description: 'test',
-          birthday: '1981-05-12T21:00:00.000Z',
+          name: '',
+          description: '',
+          birthday: '',
           deathday: '',
-          gender: 'male',
-          number: '123',
-          skin: 'white',
-          eye: 'gray',
-          hair: 'brown',
-          height: '193',
+          gender: '',
+          number: '',
+          skin: '',
+          eye: '',
+          hair: '',
+          height: '',
           coordinates: {
-            latitude: '55.755826',
-            longitude: '37.6173'
+            latitude: '',
+            longitude: ''
           },
-          fee: '2131',
+          fee: '',
           // address: '',
           image: {
             sourceUrl: '',

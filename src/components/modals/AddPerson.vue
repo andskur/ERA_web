@@ -19,7 +19,7 @@
                     @click="handleClick"
                     @drop="handleChange"
                   >
-                    <div v-if="!image.sourceUrl" class="drop-area">
+                    <div v-if="!person.image.sourceUrl" class="drop-area">
                       <i class="icon1" v-show="loading != 1">
                         <i class="icon1-arrow"></i>
                         <i class="icon1-body"></i>
@@ -31,20 +31,21 @@
                       <!-- <span class="vicp-no-supported-hint" v-show="!isSupported">No supported file</span> -->
                     </div>
                     <div v-else>
-                      <img class="img-responsive" :src="image.sourceUrl" />
-                      Size: {{image.size}} bytes
+                      <img class="img-responsive" :src="person.image.sourceUrl" />
+                      Size: {{person.image.size}} bytes
                     </div>
                     <input type="file" v-show="false" @change="handleChange" ref="fileinput">
                   </div>
                 </div>
                 <div class="col-md-9">
+                  <!-- <button type="button" class="btn btn-primary" @click="signPerson()">Write to file <i class="fa fa-file-text"></i></button> -->
                   <div class="form-group">
                     <label for="name" class="control-label">Name</label>
-                    <input v-model="name" id="name" type="text" class="form-control" placeholder="Yor name" required>
+                    <input v-model="person.name" id="name" type="text" class="form-control" placeholder="Yor name" required>
                   </div>
                   <div class="form-group">
                     <label for="description" class="control-label">Description</label>
-                    <textarea v-model="description" id="description" rows="1" class="form-control" placeholder="Some information about you" required></textarea>
+                    <textarea v-model="person.description" id="description" rows="1" class="form-control" placeholder="Some information about you" required></textarea>
                   </div>
                 </div>
               </div>
@@ -56,12 +57,12 @@
                       <span class="input-group-addon">
                         <i class="fa fa-fw fa-calendar"></i>
                       </span>
-                      <datepicker v-model="birthday" id="birthday" input-class="form-control" placeholder="Your birthday" required></datepicker>
+                      <datepicker v-model="person.birthday" id="birthday" input-class="form-control" placeholder="Your birthday" required></datepicker>
                     </div>
                   </div>
                   <div class="form-group">
                     <label for="gender" class="control-label">Gender</label>
-                    <select id="gender" v-model="gender" class="form-control">
+                    <select id="gender" v-model="person.gender" class="form-control">
                       <option>Male</option>
                       <option>Female</option>
                       <option>...</option>
@@ -69,15 +70,15 @@
                   </div>
                   <div class="form-group">
                     <label for="skin" class="control-label">Skin color</label>
-                    <input v-model="skin" id="skin" type="text" class="form-control">
+                    <input v-model="person.skin" id="skin" type="text" class="form-control">
                   </div>
                   <div class="form-group">
                     <label for="hair" class="control-label">Hair color</label>
-                    <input v-model="hair" id="hair" type="text" class="form-control">
+                    <input v-model="person.hair" id="hair" type="text" class="form-control">
                   </div>
                   <div class="form-group">
                     <label for="fee" class="control-label">Fee power</label>
-                    <input v-model="fee" id="fee" type="number" min="0" class="form-control">
+                    <input v-model="person.fee" id="fee" type="number" min="0" class="form-control">
                   </div>
                 </div>
                 <div class="col-md-6">
@@ -87,20 +88,20 @@
                       <span class="input-group-addon">
                         <i class="fa fa-fw fa-calendar"></i>
                       </span>
-                      <datepicker v-model="deathday" id="deathday" input-class="form-control" placeholder="Your deathday"></datepicker>
+                      <datepicker v-model="person.deathday" id="deathday" input-class="form-control" placeholder="Your deathday"></datepicker>
                     </div>
                   </div>
                   <div class="form-group">
                     <label for="number" class="control-label">Person number</label>
-                    <input v-model="number" id="number" type="number" min="0" class="form-control" placeholder="Person number">
+                    <input v-model="person.number" id="number" type="number" min="0" class="form-control" placeholder="Person number">
                   </div>
                   <div class="form-group">
                     <label for="eye" class="control-label">Eye color</label>
-                    <input v-model="eye" id="eye" type="text" class="form-control">
+                    <input v-model="person.eye" id="eye" type="text" class="form-control">
                   </div>
                   <div class="form-group">
                     <label for="height" class="control-label">Height</label>
-                    <input v-model="height" id="height" type="number" min="0" class="form-control">
+                    <input v-model="person.height" id="height" type="number" min="0" class="form-control">
                   </div>
                   <div class="form-group">
                     <label for="place" class="control-label">Birth place</label>
@@ -112,14 +113,21 @@
                       v-on:placechanged="getAddressData"
                     >
                     </vue-google-autocomplete>
-                    {{coordinates}}
+                    {{person.coordinates.latitude}} {{person.coordinates.longitude}}
                 </div>
                 </div>
               </div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-default" @click="$emit('close')">Cancel</button>
-              <button type="button" class="btn btn-primary" @click="">Insert person <i class="fa fa-paper-plane-o"></i></button>
+              <div v-if="!person58">
+                <button type="button" class="btn btn-default" @click="$emit('close')">Cancel</button>
+                <button type="button" class="btn btn-primary" @click="signPerson()">Sign person <i class="fa fa-lock"></i></button>
+              </div>
+              <div v-else>
+                <button type="button" class="btn btn-default" @click="$emit('close')">Cancel</button>
+                <button type="button" class="btn btn-primary" @click="toFile()">Write to file <i class="fa fa-file-text"></i></button>
+                <a :href="tomail" class="btn btn-primary" @click="">Send to email <i class="fa fa-paper-plane-o"></i></a>
+              </div>
             </div>
           </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
@@ -131,6 +139,9 @@
   import Datepicker from 'vuejs-datepicker'
   import VueGoogleAutocomplete from 'vue-google-autocomplete'
   import ImageTools from '../../images'
+  import toBytes from '../../toBytes/'
+  import bs58 from 'bs58'
+  import nacl from 'tweetnacl'
 
   export default {
     name: 'AddPersonModale',
@@ -140,23 +151,29 @@
     },
     data () {
       return {
-        name: '',
-        photo: '',
-        description: '',
-        birthday: '',
-        deathday: '',
-        gender: '',
-        number: '',
-        skin: '',
-        eye: '',
-        hair: '',
-        height: '',
-        coordinates: '',
-        fee: '',
-        address: '',
-        image: {
-          sourceUrl: '',
-          size: ''
+        person58: '',
+        tomail: '',
+        person: {
+          name: 'test',
+          description: 'test',
+          birthday: '1981-05-12T21:00:00.000Z',
+          deathday: '',
+          gender: 'male',
+          number: '123',
+          skin: 'white',
+          eye: 'gray',
+          hair: 'brown',
+          height: '193',
+          coordinates: {
+            latitude: '55.755826',
+            longitude: '37.6173'
+          },
+          fee: '2131',
+          // address: '',
+          image: {
+            sourceUrl: '',
+            size: ''
+          }
         },
         loading: '',
         error: ''
@@ -164,8 +181,9 @@
     },
     methods: {
       getAddressData (addressData, placeResultData) {
-        this.address = addressData
-        this.coordinates = addressData.latitude + ' ' + addressData.longitude
+        // this.person.address = addressData
+        this.person.coordinates.latitude = addressData.latitude
+        this.person.coordinates.longitude = addressData.longitude
       },
       preventDefault (e) {
         e.preventDefault()
@@ -182,7 +200,7 @@
         // }
       },
       resetImage () {
-        this.image.sourceUrl = null
+        this.person.image.sourceUrl = null
         this.error = null
       },
       handleChange (e) {
@@ -195,7 +213,7 @@
           // this.reset()
           var file = files[0]
           // if (this.checkFile(files[0])) {
-          this.image.size = file.size
+          this.person.image.size = file.size
           console.log(file.size)
           // this.setSourceImg(file)
           ImageTools.resize(file, {
@@ -214,8 +232,8 @@
         }
       },
       setSourceImg (file) {
-        // console.log(file.size)
-        this.image.size = file.size
+        console.log(file.size)
+        this.person.image.size = file.size
         if (file.size > 25000) {
           this.error = 'So big image'
           return
@@ -224,9 +242,52 @@
         let fr = new window.FileReader()
 
         fr.onload = function (e) {
-          that.image.sourceUrl = fr.result
+          that.person.image.sourceUrl = fr.result
         }
         fr.readAsDataURL(file)
+      },
+      toFile () {
+        console.log(this.person58)
+        this.download(this.person.name + '.txt', this.person58)
+      },
+      download (filename, text) {
+        var element = document.createElement('a')
+        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text))
+        element.setAttribute('download', filename)
+
+        element.style.display = 'none'
+        document.body.appendChild(element)
+
+        element.click()
+
+        document.body.removeChild(element)
+      },
+      signPerson () {
+        var person = JSON.stringify(this.person)
+        var personBytes = this.toBytes(person)
+        this.toggleLoading()
+        // console.log(personBytes)
+        var byteMessage = new Buffer(personBytes)
+        // console.log(byteMessage)
+        let privatekey = this.$store.state.activeWallet.keys.private
+        var signature = new Buffer(nacl.sign(byteMessage, bs58.decode(privatekey)))
+        // console.log(signature)
+        var slice1 = byteMessage.slice(0, 53)
+        var slice2 = byteMessage.slice(53, byteMessage.length)
+        var buffers = [slice1, signature, slice2]
+        var messageBuf = Buffer.concat(buffers)
+        // console.log(messageBuf)
+        var person58 = bs58.encode(messageBuf)
+        console.log(person58)
+        this.person58 = person58
+        this.tomail = 'mailto:?subject=New person - ' + this.person.name + '&body=' + this.person58
+      },
+      toBytes (person) {
+        var personBytes = toBytes.toUTF8Array(person)
+        return personBytes
+      },
+      toggleLoading () {
+        this.$store.commit('TOGGLE_LOADING')
       }
       /*
       setSourceImg (file) {

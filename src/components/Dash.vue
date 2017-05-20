@@ -155,9 +155,9 @@
                     <a v-if="person" @click="" href="javascript:;" class="btn btn-default btn-flat">
                       <i class="fa fa-user" aria-hidden="true"></i> Person
                     </a>
-                    <a v-else @click="showAddPersonModal = true" href="javascript:;" class="btn btn-default btn-flat">
+                    <router-link to="/persons/new" v-else class="btn btn-default btn-flat">
                       <i class="fa fa-user-plus" aria-hidden="true"></i> Add person
-                    </a>
+                    </router-link>
                   </div>
                   <div class="pull-right">
                     <a @click="logout" href="javascript:;" class="btn btn-default btn-flat">
@@ -219,7 +219,6 @@
     </footer>
 
     <send v-if="showSendModal" @close="showSendModal = false"></send>
-    <AddPerson v-if="showAddPersonModal" @close="showAddPersonModal = false"></AddPerson>
   </div>
   <!-- ./wrapper -->
 </template>
@@ -233,16 +232,14 @@ import auth from '../auth'
 import 'hideseek'
 // components
 import Sidebar from './Sidebar'
-// mmodals
+// modals
 import Send from './modals/Send.vue'
-import AddPerson from './modals/AddPerson.vue'
 
 export default {
   name: 'Dash',
   components: {
     Sidebar,
-    Send,
-    AddPerson
+    Send
   },
   data: function () {
     return {

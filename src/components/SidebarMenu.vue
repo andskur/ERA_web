@@ -63,11 +63,26 @@
         </li>
       </ul>
     </li>
-    <li class="pageLink" v-on:click="toggleMenu">
-      <router-link to="/persons">
+    <li class="treeview">
+      <a href="#">
         <i class="fa fa-users"></i>
-        <span class="page">Persons</span>
-      </router-link>
+        <span>Persons</span>
+        <span class="pull-right-container">
+          <i class="fa fa-angle-left fa-fw pull-right"></i>
+        </span>
+      </a>
+      <ul class="treeview-menu">
+        <li>
+          <router-link to="/persons">
+            <i class="fa fa-search"></i> Search person
+          </router-link>
+        </li>
+        <li>
+          <router-link to="/persons/new">
+            <i class="fa fa-user-plus"></i> Add person
+          </router-link>
+        </li>
+      </ul>
     </li>
     <!-- <li class="pageLink" v-on:click="toggleMenu">
       <router-link to="/repos"><i class="fa fa-heart"></i>

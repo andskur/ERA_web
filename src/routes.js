@@ -17,11 +17,14 @@ import SettingView from './components/views/Setting.vue'
 import AccessView from './components/views/Access.vue'
 import ServerView from './components/views/Server.vue'
 import ReposView from './components/views/Repos.vue'
-import PersonsView from './components/views/Persons.vue'
 // Mail Views - Dash
 import MailsView from './components/Mails.vue'
 import InboxView from './components/mail/Inbox.vue'
 import NewMailView from './components/mail/NewMail.vue'
+// Persons - Dash
+import PersonsView from './components/views/Persons.vue'
+import PersonListView from './components/views/persons/PersonList.vue'
+import PersonNewView from './components/views/persons/PersonNew.vue'
 
 // Routes
 const routes = [
@@ -109,15 +112,26 @@ const routes = [
           }
         ]
       }, {
+        path: 'persons',
+        component: PersonsView,
+        children: [
+          {
+            path: '/',
+            component: PersonListView,
+            name: 'Persons List',
+            meta: {description: 'ERA persons', auth: true}
+          }, {
+            path: 'new',
+            component: PersonNewView,
+            name: 'New Person',
+            meta: {description: '', auth: true}
+          }
+        ]
+      }, {
         path: 'tasks',
         component: TasksView,
         name: 'Tasks',
         meta: {description: 'Tasks page in the form of a timeline', auth: true}
-      }, {
-        path: 'persons',
-        component: PersonsView,
-        name: 'Persons',
-        meta: {description: 'ERA persons', auth: true}
       }, {
         path: 'setting',
         component: SettingView,

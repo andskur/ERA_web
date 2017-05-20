@@ -151,8 +151,10 @@
 
 <script>
 import Chart from 'chart.js'
-import axios from 'axios'
+// import axios from 'axios'
 import { mapState } from 'vuex'
+import ERA from 'era-javascript-api'
+// var ERA = require('era-javascript-api')
 
 // import api from '../../api'
 
@@ -180,9 +182,9 @@ export default {
     }
   },
   created () {
-    var url = this.$store.state.serverURI
+    // var url = this.$store.state.serverURI
 
-    axios.get(url + 'addresses')
+    /* axios.get(url + 'addresses')
       .then((response) => {
         this.wallet.addresses = response.data
         axios.get(url + 'addresses/balance/' + response.data[0])
@@ -205,14 +207,23 @@ export default {
         this.transactions.list = transactions
         // console.log(transactions)
         this.transactions.count = transactions.length
-      })
+      }) */
+    // axios.get('http://datachains.world:9067/api/' + 'lastblock')
+    //   .then((response) => {
+    //     console.log(response.data)
+    //   })
 
-    axios.get(url + 'blocks/last')
+    let that = this
+    ERA.block.last(function (data) {
+      that.blocks.last = data
+    })
+
+    /* axios.get(url + 'blocks/last')
       .then((response) => {
         var block = response.data
         this.blocks.last = block
         // console.log(block)
-      })
+      }) */
   },
   computed: {
     ...mapState([

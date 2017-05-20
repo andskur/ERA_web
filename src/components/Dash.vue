@@ -222,10 +222,9 @@
 import faker from 'faker'
 import { mapState } from 'vuex'
 import config from '../config'
-import axios from 'axios'
+// import axios from 'axios'
 import auth from '../auth'
 import 'hideseek'
-
 // components
 import Sidebar from './Sidebar'
 // mmodals
@@ -256,10 +255,10 @@ export default {
       error: ''
     }
   },
-  created () {
+  /* created () {
     this.checkWallet()
     this.checkForging()
-  },
+  }, */
   computed: {
     ...mapState([
       'userInfo',
@@ -275,7 +274,7 @@ export default {
     }
   },
   methods: {
-    checkWallet () {
+    /* checkWallet () {
       var url = this.$store.state.serverURI
       axios.get(url + 'core/status/')
       .then((response) => {
@@ -326,7 +325,7 @@ export default {
       .catch(function (error) {
         console.log(error)
       })
-    },
+    }, */
     logout () {
       auth.logout()
       this.$store.commit('RESET_WALLET')

@@ -2,21 +2,21 @@
   <section class="content">
     <div class="row center-block">
       <!-- <h2>Blocks Explorer</h2> -->
-      <h3>Last block height - {{this.last.height}}</h3>
+      <!-- <h3>Last block height - {{this.last.height}}</h3> -->
       <div class="col-md-12">
         <div class="box">
           <div class="box-header">
             <!-- <h3 class="box-title">Data Table With Full Features</h3> -->
             <!-- Nav tabs -->
-            <ul class="nav nav-tabs" role="tablist">
+            <!-- <ul class="nav nav-tabs" role="tablist">
               <li role="presentation" class="active"><a href="#blocks_all" aria-controls="blocks_all" role="tab" data-toggle="tab">All Blocks</a></li>
               <li role="presentation"><a href="#blocks_my" aria-controls="blocks_my" role="tab" data-toggle="tab">Your Blocks</a></li>
-            </ul>
+            </ul> -->
           </div>
           <!-- /.box-header -->
           <div class="box-body">
-            <div class="tab-content">
-              <div role="tabpanel" class="tab-pane fade in active" id="blocks_all">
+            <!-- <div class="tab-content"> -->
+              <!-- <div role="tabpanel" class="tab-pane fade in active" id="blocks_all"> -->
                 <div class="dataTables_wrapper form-inline dt-bootstrap" id="blocksAll_wrapper">
                   <div class="row">
                     <div class="col-sm-6">
@@ -43,8 +43,8 @@
                     </div>
                   </div>
                 </div>
-              </div>
-              <div role="tabpanel" class="tab-pane" id="blocks_my">
+              <!-- </div> -->
+              <!-- <div role="tabpanel" class="tab-pane" id="blocks_my">
                 <div class="dataTables_wrapper form-inline dt-bootstrap" id="blocksMy_wrapper">
                   <div class="row">
                     <div class="col-sm-6">
@@ -71,9 +71,8 @@
                     </div>
                   </div>
                 </div>
-              </div>
-            </div>
-            <!-- /.box-body -->
+              </div> -->
+            <!-- </div> -->
           </div>
         </div>
       </div>
@@ -82,8 +81,8 @@
 </template>
 
 <script>
-import axios from 'axios'
 import $ from 'jquery'
+import ERA from 'era-javascript-api'
 // Require needed datatables modules
 import 'datatables.net'
 import 'datatables.net-bs'
@@ -98,40 +97,28 @@ export default {
     }
   },
   created () {
-    this.getLastBlock()
-  },
-  methods: {
-    getLastBlock () {
-      axios.get(this.$store.state.serverURI + 'blocks/last')
-        .then(response => {
-          if (response.status !== 200) {
-            this.error = response.statusText
-            return
-          }
-
-          this.last = response.data
-
-          this.fromheight = this.last.height - 29
-        })
-        .catch(error => {
-          // Request failed.
-          console.log('error', error.response)
-          this.error = error.response.statusText
-        })
-    }
+    let that = this
+    ERA.block.last(function (data) {
+      that.last = data
+    })
   },
   mounted () {
     this.$nextTick(() => {
-      // var fromheight = axios.get(this.$store.state.serverURI + 'blocks/last').response.height
-      // console.log(fromheight)
-      $.get(this.$store.state.serverURI + 'blocks/last', function (data) {
-        var fromheight = data.height - 29
+      $.ajax({
+        url: 'http://datachains.world:9067/api/lastblock',
+        beforeSend: function (xhr) {
+          xhr.overrideMimeType('text/plain; charset=x-user-defined')
+        }
+      })
+      .done(function (data) {
+        var json = JSON.parse(data)
+        var fromheight = json.height - 29
         $('#blocksAll').DataTable({
           order: [[ 0, 'desc' ]],
           lengthMenu: [[10, 20, -1], [10, 20, 'All']],
           ajax: {
-            url: 'http://localhost:8080/api/blocks/fromheight/' + fromheight,
-            dataSrc: ''
+            url: 'http://datachains.world:9067/api/blocksfromheight/' + fromheight + '/' + 30,
+            dataSrc: 'blocks'
           },
           columns: [
             { 'data': 'height' },
@@ -143,7 +130,27 @@ export default {
           ]
         })
       })
-      $('#blocksMy').DataTable({
+
+      /* $.get('http://datachains.world:9047/api/lastblock', function (data) {
+        var fromheight = data.height - 29
+        $('#blocksAll').DataTable({
+          order: [[ 0, 'desc' ]],
+          lengthMenu: [[10, 20, -1], [10, 20, 'All']],
+          ajax: {
+            url: 'http://datachains.world:9047/api/blocksfromheight/' + fromheight + '/' + 30,
+            dataSrc: ''
+          },
+          columns: [
+            { 'data': 'height' },
+            { 'data': 'timestamp' },
+            { 'data': 'creator' },
+            { 'data': 'generatingBalance' },
+            { 'data': 'transactions' },
+            { 'data': 'fee' }
+          ]
+        })
+      }) */
+      /* $('#blocksMy').DataTable({
         order: [[ 0, 'desc' ]],
         lengthMenu: [[10, 20, -1], [10, 20, 'All']],
         ajax: {
@@ -158,7 +165,7 @@ export default {
           { 'data': 'transactions' },
           { 'data': 'fee' }
         ]
-      })
+      }) */
     })
   }
 }

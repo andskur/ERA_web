@@ -57,20 +57,12 @@
 </template>
 
 <script>
-// import axios from 'axios'
-// import api from '../../api'
-// var SHA256 = require('../../libs/sha256.js')
-// import SHA256 from '../../libs/sha256.js'
-// import Base58 from '../../libs/Base58.js'
-// require('../../libs/Base58.js')
-// import qora from '../../libs/qora.js'
-// require('../../libs/qora.js')
-
 import crypto from '../../crypto/index.js'
 import auth from '../../auth'
 // import nacl from 'tweetnacl'
 import randomWords from 'random-words'
 import bs58 from 'bs58'
+// import ERA from 'era-javascript-api'
 
 // const serverURI = 'http://localhost:8080/api/'
 
@@ -82,8 +74,8 @@ export default {
       seed: '',
       validateSeed: '',
       repeatseed: '',
-      password: '',
-      repeatpassword: '',
+      password: '232232',
+      repeatpassword: '232232',
       response: ''
     }
   },
@@ -104,9 +96,10 @@ export default {
         window.localStorage.setItem('activeWallet', JSON.stringify(wallet))
         console.log(this.$store.state.activeWallet)
         this.$router.push('/')
+      } else {
+        this.response = 'ivalid wallet!'
+        return
       }
-      this.response = 'ivalid wallet!'
-      return
     },
     generate58Seed () {
       this.resetResponse()
@@ -129,6 +122,8 @@ export default {
       // console.log('Seed from lib lenght: ' + seed.length + ' - ' + seed)
       // console.log('Length: ' + seed.length)
       this.seed = seed
+      this.repeatseed = seed
+
     },
     checkSeed () {
       this.resetResponse()

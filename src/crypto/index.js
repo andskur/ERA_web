@@ -21,7 +21,7 @@ export default {
     return this.accountSeed
   },
 
-  createAddressSeed (seed58) {
+  createAddress (seed58) {
     var seed = Base58.decode(seed58)
 
     if (seed.length !== 32) {
@@ -31,16 +31,20 @@ export default {
 
     // console.log(Base58.encode(seed))
 
-    var accountSeed = qora.generateAccountSeed(seed, 0, false)
+    // var accountSeed = qora.generateAccountSeed(seed, 0, false)
 
-    var creds = {
-      keyPair: qora.getKeyPairFromSeed(accountSeed),
-      addressSeed: Base58.encode(accountSeed)
-    }
+    /* var creds = {
+      keyPair: qora.getKeyPairFromSeed(seed),
+      addressSeed: Base58.encode(seed)
+    } */
 
-    creds.address = qora.getAccountAddressFromPublicKey(creds.keyPair.publicKey)
+    // creds.address = qora.getAccountAddressFromPublicKey(creds.keyPair.publicKey)
 
-    return creds
+    this.generateKeys(seed)
+
+    var address = qora.getAccountAddressFromPublicKey(this.keyPair.publicKey)
+
+    return address
 
     // this.accountFromSeed(this.base58.addressSeed)
 

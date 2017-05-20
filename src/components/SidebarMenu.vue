@@ -16,11 +16,11 @@
         <span class="page">Transactions</span>
       </router-link>
     </li>
-    <li class="pageLink" v-on:click="toggleMenu">
+    <!-- <li class="pageLink" v-on:click="toggleMenu">
       <router-link to="/peers"><i class="fa fa-tasks"></i>
         <span class="page">Peers</span>
       </router-link>
-    </li>
+    </li> -->
     <li class="treeview">
       <a href="#">
         <i class="fa fa-folder-o"></i>

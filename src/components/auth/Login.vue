@@ -11,6 +11,7 @@
       <div class="input-group input-large">
         <span class="input-group-addon"><i class="fa fa-certificate"></i></span>
         <select class="form-control" v-model="credentials.seed">
+          <option disabled>Select your wallet</option>
           <option v-for="wallet in wallets" v-bind:value="wallet.id">
             {{wallet.seed}}
           </option>

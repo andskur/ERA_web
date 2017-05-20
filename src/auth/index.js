@@ -42,44 +42,12 @@ export default {
       console.log(error)
       return
     })
-
-/*
-    axios.get('http://localhost:8080/api/blocks/last')
-      .then(response => {
-        if (response.status !== 200) {
-          this.error = response.statusText
-          return
-        }
-
-        this.last = response.data
-
-        this.fromheight = this.last.height - 29
-      })
-      .catch(error => {
-       // Request failed.
-        console.log('error', error.response)
-        this.error = error.response.statusText
-      })
-*/
-/*
-    context.$http.post(LOGIN_URL, creds, (data) => {
-      window.localStorage.setItem('id_token', data.id_token)
-      window.localStorage.setItem('access_token', data.access_token)
-
-      this.user.authenticated = true
-
-      // Redirect to a specified route
-      if (redirect) {
-        // router.go(redirect)
-      }
-    }).error((err) => {
-      context.error = err
-    })
-    */
   },
 
   createWallet (seed, password, walletsCount) {
-    crypto.generateKeys(seed)
+    var address = crypto.createAddress(seed)
+
+    // crypto.generateKeys(seed)
 
     // create keypair
     var privatekey = crypto.base58.AccountPrivateKey
@@ -93,32 +61,15 @@ export default {
       id: walletsCount + 1,
       seed: seed,
       password: password,
+      address: address,
       keys: {
         private: privatekey,
         public: publickey
       }
     }
+
     axios.defaults.headers.common['Authorization'] = 'Bearer' + window.localStorage.getItem('access_token')
     return wallet
-
-    // window.localStorage.setItem('privatekey', privatekey)
-    // window.localStorage.setItem('publickey', publickey)
-
-    // axios.defaults.headers.common['Authorization'] = 'Bearer' + window.localStorage.getItem('access_token')
-
-    /*
-    axios.post(API_URL + 'wallet', {
-      seed: seed,
-      password: password,
-      recover: true
-    })
-    .then((response) => {
-      console.log(response.data)
-    })
-    .catch(function (error) {
-      console.log(error)
-    })
-    */
   },
 
   // To log out, we just need to remove the token

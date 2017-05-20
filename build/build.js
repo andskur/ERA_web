@@ -24,6 +24,7 @@ rm('-rf', assetsPath)
 mkdir('-p', assetsPath)
 cp('-R', 'static/*', assetsPath)
 cp('_redirects', config.build.assetsRoot)
+cp('.htaccess', config.build.assetsRoot)
 
 webpack(webpackConfig, function (err, stats) {
   spinner.stop()

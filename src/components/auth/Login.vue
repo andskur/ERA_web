@@ -44,8 +44,8 @@
 </template>
 
 <script>
-import api from '../../api'
 import auth from '../../auth'
+// import passwords from '../../auth/passwords'
 
 export default {
   name: 'Login',
@@ -76,6 +76,10 @@ export default {
       this.toggleLoading()
       this.resetResponse()
 
+      // passwords.crypt(this.password, function (hash) {
+      //   console.log(hash)
+      // })
+
       if (this.validForm()) {
         var credentials = {
           seed: this.credentials.seed,
@@ -98,56 +102,6 @@ export default {
         return false
       }
       return true
-    },
-    checkCreds () {
-      const {seed, password} = this
-
-      this.toggleLoading()
-      this.resetResponse()
-      this.$store.commit('TOGGLE_LOADING')
-
-      /* Making API call to authenticate a user */
-      api.request('post', '/login', {seed, password})
-      .then(response => {
-        this.toggleLoading()
-
-        var data = response.data
-        /* Checking if error object was returned from the server */
-        if (data.error) {
-          var errorName = data.error.name
-          if (errorName) {
-            this.response = errorName === 'InvalidCredentialsError'
-            ? 'Seed/Password incorrect. Please try again.'
-            : errorName
-          } else {
-            this.response = data.error
-          }
-
-          return
-        }
-
-        /* Setting user in the state and caching record to the localStorage */
-        if (data.user) {
-          var token = 'Bearer ' + data.token
-
-          this.$store.commit('SET_USER', data.user)
-          this.$store.commit('SET_TOKEN', token)
-
-          if (window.localStorage) {
-            window.localStorage.setItem('seed', JSON.stringify(data.user))
-            window.localStorage.setItem('token', token)
-          }
-
-          this.$router.push(data.redirect)
-        }
-      })
-      .catch(error => {
-        this.$store.commit('TOGGLE_LOADING')
-        console.log(error)
-
-        this.response = 'Server appears to be offline'
-        this.toggleLoading()
-      })
     },
     toggleLoading () {
       this.loading = (this.loading === '') ? 'loading' : ''

@@ -2,8 +2,7 @@ import axios from 'axios'
 import _ from 'lodash'
 import token from './token.js'
 import crypto from '../crypto/index.js'
-
-// const API_URL = 'http://localhost:8080/api/'
+import bcrypt from 'bcrypt-nodejs'
 
 export default {
 
@@ -21,7 +20,7 @@ export default {
     var wallet = _.find(wallets, walletSearch)
 
     var errorText = 'The username or password don\'t match'
-    if (!wallet || wallet.password !== passw) {
+    if (!wallet || !bcrypt.compareSync(passw, wallet.password)) {
       context.response.target = 'password'
       context.response.data = errorText
       return
@@ -39,7 +38,7 @@ export default {
 
   createWallet (seed, password, walletsCount) {
     var address = crypto.createAddress(seed)
-    // crypto.generateKeys(seed)
+    crypto.generateKeys(seed)
 
     // create keypair
     var privatekey = crypto.base58.AccountPrivateKey
@@ -49,10 +48,12 @@ export default {
     window.localStorage.setItem('id_token', token.createIdToken(seed, privatekey))
     window.localStorage.setItem('access_token', token.createAccessToken(privatekey))
 
+    var hash = bcrypt.hashSync(password)
+
     var wallet = {
       id: walletsCount + 1,
       seed: seed,
-      password: password,
+      password: hash,
       address: address,
       keys: {
         private: privatekey,

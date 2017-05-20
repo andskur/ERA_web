@@ -67,6 +67,7 @@ import auth from '../../auth'
 import randomWords from 'random-words'
 import bs58 from 'bs58'
 // import ERA from 'era-javascript-api'
+// import passwords from '../../auth/passwords'
 
 // const serverURI = 'http://localhost:8080/api/'
 
@@ -99,6 +100,7 @@ export default {
         // Create and add wallet to wallets store
         var wallets = this.$store.state.wallets
         var wallet = auth.createWallet(this.seed, this.password, wallets.length)
+        // auth.createWallet(this.seed, this.password, wallets.length)
         this.$store.commit('ADD_WALLET', wallet)
         window.localStorage.setItem('wallets', JSON.stringify(wallets))
         this.$store.commit('SET_activeWallet', wallet)

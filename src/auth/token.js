@@ -1,13 +1,7 @@
-// var express = require('express')
-// var _ = require('lodash')
 var jwt = require('jsonwebtoken')
-
-// var app = module.exports = express.Router();
 
 export default {
   createIdToken (seed, privatkey) {
-    // console.log(seed)
-    // console.log(privatkey)
     return jwt.sign({ seed: seed }, privatkey, { expiresIn: 60 * 60 * 5 })
   },
 

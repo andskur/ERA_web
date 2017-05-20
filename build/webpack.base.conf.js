@@ -10,6 +10,11 @@ var cssSourceMapDev = (env === 'development' && config.dev.cssSourceMap)
 var cssSourceMapProd = (env === 'production' && config.build.productionSourceMap)
 var useCssSourceMap = cssSourceMapDev || cssSourceMapProd
 
+var vue = 'vue'
+if (env === 'production') {
+  vue = vue + '.min'
+}
+
 module.exports = {
   entry: {
     app: './src/main.js'
@@ -23,7 +28,7 @@ module.exports = {
     extensions: ['', '.js', '.vue'],
     fallback: [path.join(__dirname, '../node_modules')],
     alias: {
-      'vue$': 'vue/dist/vue.min',
+      'vue$': 'vue/dist/' + vue,
       'src': path.resolve(__dirname, '../src'),
       'assets': path.resolve(__dirname, '../src/assets'),
       'components': path.resolve(__dirname, '../src/components')

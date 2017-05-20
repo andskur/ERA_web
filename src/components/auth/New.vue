@@ -13,15 +13,19 @@
           <input class="form-control" name="password" placeholder="Password" type="password" v-model="password">
         </div> -->
 
-        <h4 class="animated infinite bounce">Remember your seed! </h4>
+        <h4 class="animated bounce">Remember your seed! </h4>
         <div class="input-group input-large">
           <span class="input-group-addon"><i class="fa fa-certificate"></i></span>
           <input readonly class="form-control" name="seed" placeholder="Base 58 Seed" type="text" v-model="seed">
         </div>
-        <a v-bind:class="'btn btn-primary btn-lg fade-hover ' + loading" @click="generate58Seed">New Seed</a>
-        <button type="submit" v-bind:class="'btn btn-primary btn-lg hvr-icon-forward fade-hover ' + loading">Next 
-          <!-- <i class="fa fa-arrow-right" aria-hidden="true"></i> -->
-        </button>
+        <div class="row">
+          <div class="col-md-6">
+            <a v-bind:class="'btn btn-primary btn-lg fade-hover hvr-icon-spin ' + loading" @click="generate58Seed">New</a>
+          </div>
+          <div class="col-md-6">
+            <button type="submit" v-bind:class="'btn btn-primary btn-lg fade-hover hvr-icon-forward ' + loading">Next</button>
+          </div>
+        </div>
       </form>
       <form v-else class="ui form loginForm" @submit.prevent="createWallet" key="seed_submit">
 
@@ -41,12 +45,12 @@
         </div>
         <div class="row">
           <div class="col-md-6">
-            <a v-bind:class="'btn btn-primary btn-lg fade-hover ' + loading" @click="validateSeed = !validateSeed">
-              <i class="fa fa-arrow-left" aria-hidden="true"></i> Back
+            <a v-bind:class="'btn btn-primary btn-lg fade-hover hvr-icon-back ' + loading" @click="validateSeed = !validateSeed">
+              Back
             </a>
           </div>
           <div class="col-md-6">
-            <button type="submit" v-bind:class="'btn btn-primary btn-lg fade-hover ' + loading">Submit!</button>
+            <button type="submit" v-bind:class="'btn btn-primary btn-lg fade-hover hvr-icon-fade ' + loading">Submit</button>
           </div>
         </div>
       </form>
@@ -81,6 +85,11 @@ export default {
   },
   created () {
     this.generate58Seed()
+    if (process.env.NODE_ENV === 'development') {
+      this.repeatseed = this.seed
+      this.password = 232232
+      this.repeatpassword = 232232
+    }
   },
   methods: {
     createWallet () {
@@ -94,7 +103,7 @@ export default {
         window.localStorage.setItem('wallets', JSON.stringify(wallets))
         this.$store.commit('SET_activeWallet', wallet)
         window.localStorage.setItem('activeWallet', JSON.stringify(wallet))
-        console.log(this.$store.state.activeWallet)
+        // console.log(this.$store.state.activeWallet)
         this.$router.push('/')
       } else {
         this.response = 'ivalid wallet!'

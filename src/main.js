@@ -107,14 +107,11 @@ if (window.localStorage) {
   if (store.state.activeWallet !== activeWallet && activeWallet != null) {
     store.commit('SET_activeWallet', activeWallet)
   }
-  // console.log(store.state.wallets)
-  // console.log(store.state.activeWallet)
 
   if (store.state.jwt.idToken !== idToken) {
     store.commit('SET_idToken', idToken)
     store.commit('SET_accessToken', accessToken)
   }
-  // console.log(store.state.user)
 } else {
   console.log(false)
 }

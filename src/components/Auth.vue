@@ -2,12 +2,21 @@
   <div class="container container-table">
       <div class="row vertical-3p">
         <div class="container">
-          <!-- <router-link to="/"> -->
-            <img src="/static/img/logo.png" class="center-block logo">
-          <!-- </router-link> -->
+          <div class="center-block" style="text-align: center">
+            <router-link to="/">
+              <img src="/static/img/logo.png" class="logo">
+            </router-link>
+          </div>
           <div class="text-center col-md-4 col-sm-offset-4">
             <!-- auth form -->
-            <router-view></router-view>
+            <transition 
+              name="custom-classes-transition"
+              enter-active-class="animated fadeIn"
+              leave-active-class="animated fadeOut"
+              mode="out-in"
+            >
+              <router-view></router-view>
+            </transition>
           </div>
         </div>
       </div>

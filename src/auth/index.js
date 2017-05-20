@@ -1,10 +1,9 @@
 import axios from 'axios'
-// import nacl from 'tweetnacl'
-
+import _ from 'lodash'
 import token from './token.js'
 import crypto from '../crypto/index.js'
 
-const API_URL = 'http://localhost:8080/api/'
+// const API_URL = 'http://localhost:8080/api/'
 
 export default {
 
@@ -17,36 +16,29 @@ export default {
     var seed = credentials.seed
     var passw = credentials.password
 
-    // console.log(credentials)
+    var wallets = context.$store.state.wallets
+    var walletSearch = {seed: seed}
+    var wallet = _.find(wallets, walletSearch)
 
-    crypto.generateKeys(seed)
+    var errorText = 'The username or password don\'t match'
+    if (!wallet || wallet.password !== passw) {
+      context.response.target = 'password'
+      context.response.data = errorText
+      return
+    }
 
-    var privatekey = crypto.base58.AccountPrivateKey
-    var publickey = crypto.base58.AccountPublicKey
-
+    // create jwt
+    var privatekey = wallet.keys.private
     window.localStorage.setItem('id_token', token.createIdToken(seed, privatekey))
     window.localStorage.setItem('access_token', token.createAccessToken(privatekey))
-    window.localStorage.setItem('privatekey', privatekey)
-    window.localStorage.setItem('publickey', publickey)
 
-    axios.post(API_URL + '/wallet/unlock', {
-      password: passw
-    })
-    .then(function (response) {
-      console.log(response)
+    axios.defaults.headers.common['Authorization'] = 'Bearer' + window.localStorage.getItem('access_token')
 
-      axios.defaults.headers.common['Authorization'] = 'Bearer' + window.localStorage.getItem('access_token')
-      this.user.authenticated = true
-    })
-    .catch(function (error) {
-      console.log(error)
-      return
-    })
+    return wallet
   },
 
   createWallet (seed, password, walletsCount) {
     var address = crypto.createAddress(seed)
-
     // crypto.generateKeys(seed)
 
     // create keypair
@@ -76,6 +68,7 @@ export default {
   logout () {
     window.localStorage.removeItem('id_token')
     window.localStorage.removeItem('access_token')
+    window.localStorage.removeItem('activeWallet')
     this.user.authenticated = false
     axios.defaults.headers.common['Authorization'] = ''
   },

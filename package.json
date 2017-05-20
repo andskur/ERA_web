@@ -12,8 +12,7 @@
     "build": "node build/build.js",
     "unit": "karma start test/unit/karma.conf.js --single-run",
     "e2e": "node test/e2e/runner.js",
-    "test": "npm run unit && npm run e2e",
-    "deploy": "netlify deploy dist"
+    "test": "npm run unit && npm run e2e"
   },
   "dependencies": {
     "animate.css": "^3.5.2",

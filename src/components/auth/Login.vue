@@ -76,10 +76,6 @@ export default {
       this.toggleLoading()
       this.resetResponse()
 
-      // passwords.crypt(this.password, function (hash) {
-      //   console.log(hash)
-      // })
-
       if (this.validForm()) {
         var credentials = {
           seed: this.credentials.seed,

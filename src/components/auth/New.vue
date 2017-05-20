@@ -74,8 +74,8 @@ export default {
       seed: '',
       validateSeed: '',
       repeatseed: '',
-      password: '232232',
-      repeatpassword: '232232',
+      password: '',
+      repeatpassword: '',
       response: ''
     }
   },
@@ -122,7 +122,7 @@ export default {
       // console.log('Seed from lib lenght: ' + seed.length + ' - ' + seed)
       // console.log('Length: ' + seed.length)
       this.seed = seed
-      this.repeatseed = seed
+      // this.repeatseed = seed
     },
     checkSeed () {
       this.resetResponse()

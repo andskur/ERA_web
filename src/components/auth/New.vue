@@ -123,7 +123,6 @@ export default {
       // console.log('Length: ' + seed.length)
       this.seed = seed
       this.repeatseed = seed
-
     },
     checkSeed () {
       this.resetResponse()

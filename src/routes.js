@@ -33,7 +33,15 @@ const routes = [
       {
         path: '',
         component: LoginView,
-        meta: {auth: false}
+        meta: {auth: false},
+        beforeEnter: (to, from, next) => {
+          var wallets = window.localStorage.getItem('wallets')
+          if (wallets) {
+            next()
+          } else {
+            next('/auth/new')
+          }
+        }
       }, {
         path: 'new',
         component: NewView,

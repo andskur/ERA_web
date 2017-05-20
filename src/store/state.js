@@ -2,6 +2,7 @@ export default {
   callingAPI: false,
   searching: '',
   serverURI: 'http://localhost:8080/api/',
+  welcomeMSG: true,
   jwt: {
     idToken: null,
     accessToken: null

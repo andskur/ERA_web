@@ -1,15 +1,6 @@
 <template>
   <section class="content">
     <div class="row">
-      <!-- <ul>
-        <li v-for="address in wallet.addresses">
-          {{ address }}
-        </li>
-      </ul> -->
-      <div v-if="!person" class="alert alert-success alert-dismissible">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-        <h4><i class="icon fa fa-check"></i> Welcome to ERA blockchain platform!</h4>
-      </div>
       <div class="col-md-3 col-sm-6 col-xs-12">
         <div class="info-box bg-aqua">
           <span class="info-box-icon"><i class="fa fa-money" aria-hidden="true"></i></span>

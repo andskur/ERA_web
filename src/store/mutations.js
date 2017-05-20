@@ -25,5 +25,8 @@ export default {
   },
   ADD_PERSON (state, person) {
     state.person = person
+  },
+  DISMIS_WELCOME (state) {
+    state.welcomeMSG = false
   }
 }

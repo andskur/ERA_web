@@ -178,6 +178,12 @@
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
+      <div v-if="$store.state.welcomeMSG" class="welcome-wrapper">
+        <div class="alert alert-success alert-dismissible">
+          <button @click="closeWelcome" type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+          <h4><i class="icon fa fa-check"></i> Welcome to ERA blockchain platform!</h4>
+        </div>
+      </div>
       <!-- Content Header (Page header) -->
       <section class="content-header">
         <h1 v-if="$route.name === 'Inbox' || $route.name === 'New Mail'">
@@ -326,6 +332,9 @@ export default {
         console.log(error)
       })
     }, */
+    closeWelcome () {
+      this.$store.commit('DISMIS_WELCOME')
+    },
     logout () {
       auth.logout()
       this.$store.commit('RESET_WALLET')
@@ -452,5 +461,9 @@ textarea {
 // place autocomplete container
 .pac-container {
   z-index: 10000;
+}
+
+.welcome-wrapper {
+  padding: 10px 10% 0;
 }
 </style>

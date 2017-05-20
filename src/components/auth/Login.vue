@@ -83,6 +83,8 @@ export default {
         }
 
         auth.login(this, credentials)
+        this.$store.commit('SET_activeWallet', wallet)
+        window.localStorage.setItem('activeWallet', JSON.stringify(wallet))
         this.$router.push('/')
       }
     },

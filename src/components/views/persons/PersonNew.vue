@@ -1,125 +1,168 @@
 <template>
-  <div class="box-body">
-    <div class="row">
-      <div class="col-md-4">
-        <label>Add Image</label>
-        <div 
-          class="image-upload"
-          @dragleave="preventDefault"
-          @dragover="preventDefault"
-        @dragenter="preventDefault"
-        @click="handleClick"
-        @drop="handleChange"
+  <div class="row">
+    <div class="col-md-9">
+      <div class="box box-primary">
+        <div class="box-header with-border">
+          <!-- <h3 class="box-title">{{$route.name}}</h3> -->
+          <div v-if="$route.name === 'Persons List'" class="box-tools pull-right">
+            <div class="has-feedback">
+              <input type="text" class="form-control input-sm" placeholder="Search Person">
+              <i class="fa fa-search form-control-feedback" aria-hidden="true"></i>
+            </div>
+          </div>
+        </div>
+        <transition 
+        name="custom-classes-transition"
+        enter-active-class="animated fadeInUp"
+        leave-active-class="animated fadeOutDown"
+        mode="out-in"
         >
-        <div v-if="!person.image.sourceUrl" class="drop-area">
-          <i class="icon1" v-show="loading != 1">
-            <i class="icon1-arrow"></i>
-            <i class="icon1-body"></i>
-            <i class="icon1-bottom"></i>
-          </i>
+        <div class="box-body">
+          <div class="row">
+            <div class="col-md-4">
+              <label>Add Image</label>
+              <div 
+              class="image-upload"
+              @dragleave="preventDefault"
+              @dragover="preventDefault"
+              @dragenter="preventDefault"
+              @click="handleClick"
+              @drop="handleChange"
+              >
+              <div v-if="!person.image.sourceUrl" class="drop-area">
+                <i class="icon1" v-show="loading != 1">
+                  <i class="icon1-arrow"></i>
+                  <i class="icon1-body"></i>
+                  <i class="icon1-bottom"></i>
+                </i>
 
-          <!-- <span class="hint" v-show="loading !== 1">15 - 20kb</span> -->
-          <span class="hint" v-show="error">{{error}}</span>
-          <!-- <span class="vicp-no-supported-hint" v-show="!isSupported">No supported file</span> -->
-        </div>
-        <div v-else>
-          <img class="img-responsive" :src="person.image.sourceUrl" />
-          Size: {{person.image.size}} bytes
-        </div>
-        <input type="file" v-show="false" @change="handleChange" ref="fileinput">
-        </div>
-      </div>
-      <div class="col-md-8">
-        <!-- <button type="button" class="btn btn-primary" @click="signPerson()">Write to file <i class="fa fa-file-text"></i></button> -->
-        <div class="form-group">
-          <label for="name" class="control-label">Name</label>
-          <input v-model="person.name" id="name" type="text" class="form-control" placeholder="Yor name" required>
-        </div>
-        <div class="form-group">
-          <label for="description" class="control-label">Description</label>
-          <textarea v-model="person.description" id="description" rows="4" class="form-control" placeholder="Some information about you" required></textarea>
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-6">
-        <div class="form-group">
-          <label for="birthday" class="control-label">Birthday</label>
-          <div class="input-group">
-            <span class="input-group-addon">
-              <i class="fa fa-fw fa-calendar"></i>
-            </span>
-            <datepicker v-model="person.birthday" id="birthday" input-class="form-control" placeholder="Your birthday" required></datepicker>
+                <!-- <span class="hint" v-show="loading !== 1">15 - 20kb</span> -->
+                <span class="hint" v-show="error">{{error}}</span>
+                <!-- <span class="vicp-no-supported-hint" v-show="!isSupported">No supported file</span> -->
+              </div>
+              <div v-else>
+                <img class="img-responsive" :src="person.image.sourceUrl" />
+                Size: {{person.image.size}} bytes
+              </div>
+              <input type="file" v-show="false" @change="handleChange" ref="fileinput">
+            </div>
+          </div>
+          <div class="col-md-8">
+            <!-- <button type="button" class="btn btn-primary" @click="signPerson()">Write to file <i class="fa fa-file-text"></i></button> -->
+            <div class="form-group">
+              <label for="name" class="control-label">Name</label>
+              <input v-model="person.name" id="name" type="text" class="form-control" placeholder="Yor name" required>
+            </div>
+            <div class="form-group">
+              <label for="description" class="control-label">Description</label>
+              <textarea v-model="person.description" id="description" rows="4" class="form-control" placeholder="Some information about you" required></textarea>
+            </div>
           </div>
         </div>
-        <div class="form-group">
-          <label for="gender" class="control-label">Gender</label>
-          <select id="gender" v-model="person.gender" class="form-control">
-            <option>Male</option>
-            <option>Female</option>
-            <option>...</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="skin" class="control-label">Skin color</label>
-          <input v-model="person.skin" id="skin" type="text" class="form-control">
-        </div>
-        <div class="form-group">
-          <label for="hair" class="control-label">Hair color</label>
-          <input v-model="person.hair" id="hair" type="text" class="form-control">
-        </div>
-        <div class="form-group">
-          <label for="fee" class="control-label">Fee power</label>
-          <input v-model="person.fee" id="fee" type="number" min="0" class="form-control">
-        </div>
-      </div>
-      <div class="col-md-6">
-        <div class="form-group">
-          <label for="deathday" class="control-label">Deathday</label>
-          <div class="input-group">
-            <span class="input-group-addon">
-              <i class="fa fa-fw fa-calendar"></i>
-            </span>
-            <datepicker v-model="person.deathday" id="deathday" input-class="form-control" placeholder="Your deathday"></datepicker>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="birthday" class="control-label">Birthday</label>
+              <div class="input-group">
+                <span class="input-group-addon">
+                  <i class="fa fa-fw fa-calendar"></i>
+                </span>
+                <datepicker v-model="person.birthday" id="birthday" input-class="form-control" placeholder="Your birthday" required></datepicker>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="gender" class="control-label">Gender</label>
+              <select id="gender" v-model="person.gender" class="form-control">
+                <option>Male</option>
+                <option>Female</option>
+                <option>...</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="skin" class="control-label">Skin color</label>
+              <input v-model="person.skin" id="skin" type="text" class="form-control">
+            </div>
+            <div class="form-group">
+              <label for="hair" class="control-label">Hair color</label>
+              <input v-model="person.hair" id="hair" type="text" class="form-control">
+            </div>
+            <div class="form-group">
+              <label for="fee" class="control-label">Fee power</label>
+              <input v-model="person.fee" id="fee" type="number" min="0" class="form-control">
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="deathday" class="control-label">Deathday</label>
+              <div class="input-group">
+                <span class="input-group-addon">
+                  <i class="fa fa-fw fa-calendar"></i>
+                </span>
+                <datepicker v-model="person.deathday" id="deathday" input-class="form-control" placeholder="Your deathday"></datepicker>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="number" class="control-label">Person number</label>
+              <input v-model="person.number" id="number" type="number" min="0" class="form-control" placeholder="Person number">
+            </div>
+            <div class="form-group">
+              <label for="eye" class="control-label">Eye color</label>
+              <input v-model="person.eye" id="eye" type="text" class="form-control">
+            </div>
+            <div class="form-group">
+              <label for="height" class="control-label">Height</label>
+              <input v-model="person.height" id="height" type="number" min="0" class="form-control">
+            </div>
+            <div class="form-group">
+              <label for="place" class="control-label">Birth place</label>
+              <vue-google-autocomplete
+              id="place"
+              classname="form-control"
+              placeholder="Your birt city"
+              types="(cities)"
+              v-on:placechanged="getAddressData"
+              >
+            </vue-google-autocomplete>
+            {{person.coordinates.latitude}} {{person.coordinates.longitude}}
           </div>
         </div>
-        <div class="form-group">
-          <label for="number" class="control-label">Person number</label>
-          <input v-model="person.number" id="number" type="number" min="0" class="form-control" placeholder="Person number">
-        </div>
-        <div class="form-group">
-          <label for="eye" class="control-label">Eye color</label>
-          <input v-model="person.eye" id="eye" type="text" class="form-control">
-        </div>
-        <div class="form-group">
-          <label for="height" class="control-label">Height</label>
-          <input v-model="person.height" id="height" type="number" min="0" class="form-control">
-        </div>
-        <div class="form-group">
-          <label for="place" class="control-label">Birth place</label>
-          <vue-google-autocomplete
-          id="place"
-          classname="form-control"
-          placeholder="Your birt city"
-          types="(cities)"
-          v-on:placechanged="getAddressData"
-          >
-        </vue-google-autocomplete>
-          {{person.coordinates.latitude}} {{person.coordinates.longitude}}
+      </div>
+      <div v-if="!person58">
+        <!-- <button type="button" class="btn btn-default" @click="$emit('close')">Cancel</button> -->
+        <button type="button" class="btn btn-warning" @click="clearData()">Clear Data <i class="fa fa-times"></i></button>
+        <button type="button" class="btn btn-primary" @click="signPerson()">Sign person <i class="fa fa-lock"></i></button>
+      </div>
+      <div v-else>
+        <!-- <button type="button" class="btn btn-default" @click="$emit('close')">Cancel</button> -->
+        <button type="button" class="btn btn-warning" @click="clearData()">Clear Data <i class="fa fa-times"></i></button>
+        <button type="button" class="btn btn-primary" @click="toFile()">Write to file <i class="fa fa-file-text"></i></button>
+        <a :href="tomail" class="btn btn-primary" @click="">Send to email <i class="fa fa-paper-plane-o"></i></a>
+      </div>
+    </div>
+  </transition>
+</div>
+</div>
+<div class="col-md-3" id="block-sidebar">
+        <!-- <router-link to="/mails">
+          <button class="btn btn-primary btn-block margin-bottom"><i class="fa fa-inbox"></i> Back to Inbox</button>
+        </router-link> -->
+        <div class="box box-solid">
+          <!-- <div class="box-header with-border">
+            <h3 class="box-title"></h3>
+          </div> -->
+          <div class="box-body no-padding">
+            <ul class="nav nav-pills nav-stacked">
+              <li><a href="#" @click="clearData()"><i class="fa fa-times"></i> Clear Data</a></li>
+              <li v-if="!person58"><a href="#" @click="signPerson()"><i class="fa fa-lock"></i> Sign person</a></li>
+              <li v-else><a href="#" @click="toFile()"><i class="fa fa-file-text"></i> Write to file</a></li>
+              <li v-if="person58"><a :href="tomail"><i class="fa fa-paper-plane-o"></i> Send to email</a></li>
+            </ul>
+          </div>
+          <!-- /.box-body -->
         </div>
       </div>
     </div>
-    <div v-if="!person58">
-      <button type="button" class="btn btn-default" @click="$emit('close')">Cancel</button>
-      <button type="button" class="btn btn-primary" @click="signPerson()">Sign person <i class="fa fa-lock"></i></button>
-    </div>
-    <div v-else>
-      <button type="button" class="btn btn-default" @click="$emit('close')">Cancel</button>
-      <button type="button" class="btn btn-primary" @click="toFile()">Write to file <i class="fa fa-file-text"></i></button>
-      <a :href="tomail" class="btn btn-primary" @click="">Send to email <i class="fa fa-paper-plane-o"></i></a>
-    </div>
-  </div>
-</template>
+  </template>
 <script>
   import Datepicker from 'vuejs-datepicker'
   import VueGoogleAutocomplete from 'vue-google-autocomplete'
@@ -266,6 +309,25 @@
         console.log(person58)
         this.person58 = person58
         this.tomail = 'mailto:?subject=New person - ' + this.person.name + '&body=' + this.person58
+      },
+      clearData () {
+        this.person58 = null
+        this.person.name = null
+        this.person.description = null
+        this.person.birthday = null
+        this.person.deathday = null
+        this.person.gender = null
+        this.person.number = null
+        this.person.skin = null
+        this.person.eye = null
+        this.person.hair = null
+        this.person.height = null
+        this.person.height = null
+        this.person.coordinates.latitude = null
+        this.person.coordinates.longitude = null
+        this.person.fee = null
+        this.person.image.sourceUrl = null
+        this.person.image.size = null
       },
       toBytes (person) {
         var personBytes = toBytes.toUTF8Array(person)

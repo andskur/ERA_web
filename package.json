@@ -3,7 +3,6 @@
   "version": "0.2.7",
   "description": "ERA web interface",
   "author": "Andrey Skurlatov <a.skurlatov@gmail.com>",
-  "main": "elect.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/andskur/ERA_web.git"

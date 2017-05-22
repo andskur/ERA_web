@@ -16,7 +16,6 @@
                 <span class="input-group-addon">
                   <i class="fa fa-fw fa-calendar"></i>
                 </span>
-                <datepicker :readonly="true" format="MMM/D/YYYY" id="dateInput" width="100%"></datepicker>
               </div>
               <br />
               <br />
@@ -100,11 +99,9 @@
 </template>
 <script>
 require('moment')
-import datepicker from 'vue-date-picker'
 
 export default {
   name: 'Settings',
-  components: { datepicker },
   computed: {
     datetime () {
       return new Date()

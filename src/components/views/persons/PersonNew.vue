@@ -29,118 +29,121 @@
               @click="handleClick"
               @drop="handleChange"
               >
-              <div v-if="!person.image.sourceUrl" class="drop-area">
-                <i class="icon1" v-show="loading != 1">
-                  <i class="icon1-arrow"></i>
-                  <i class="icon1-body"></i>
-                  <i class="icon1-bottom"></i>
-                </i>
+                <div v-if="!person.image.sourceUrl" class="drop-area">
+                  <i class="icon1" v-show="loading != 1">
+                    <i class="icon1-arrow"></i>
+                    <i class="icon1-body"></i>
+                    <i class="icon1-bottom"></i>
+                  </i>
 
-                <!-- <span class="hint" v-show="loading !== 1">15 - 20kb</span> -->
-                <span class="hint" v-show="error">{{error}}</span>
-                <!-- <span class="vicp-no-supported-hint" v-show="!isSupported">No supported file</span> -->
+                  <!-- <span class="hint" v-show="loading !== 1">15 - 20kb</span> -->
+                  <span class="hint" v-show="error">{{error.image}}</span>
+                  <!-- <span class="vicp-no-supported-hint" v-show="!isSupported">No supported file</span> -->
+                </div>
+                <div v-else>
+                  <img class="img-responsive" :src="person.image.sourceUrl" />
+                  Size: {{person.image.size}} bytes
+                </div>
+                <input type="file" v-show="false" @change="handleChange" ref="fileinput">
               </div>
-              <div v-else>
-                <img class="img-responsive" :src="person.image.sourceUrl" />
-                Size: {{person.image.size}} bytes
-              </div>
-              <input type="file" v-show="false" @change="handleChange" ref="fileinput">
             </div>
-          </div>
-          <div class="col-md-8">
+            <div class="col-md-8">
             <!-- <button type="button" class="btn btn-primary" @click="signPerson()">Write to file <i class="fa fa-file-text"></i></button> -->
-            <div class="form-group">
+            <div class="form-group" :class="{ 'has-success': person58, 'has-error': error.name}">
               <label for="name" class="control-label">Name</label>
-              <input v-model="person.name" id="name" type="text" class="form-control" placeholder="Yor name" required>
+              <input v-model="person.name" id="name" type="text" class="form-control" placeholder="Yor name" :disabled="person58" required>
             </div>
-            <div class="form-group">
+            <div class="form-group" :class="{ 'has-success': person58, 'has-error': error.description}">
               <label for="description" class="control-label">Description</label>
-              <textarea v-model="person.description" id="description" rows="4" class="form-control" placeholder="Some information about you" required></textarea>
+              <textarea v-model="person.description" id="description" rows="4" class="form-control" placeholder="Some information about you" :disabled="person58" required></textarea>
+            </div>
             </div>
           </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6">
-            <div class="form-group">
-              <label for="birthday" class="control-label">Birthday</label>
-              <div class="input-group">
-                <span class="input-group-addon">
-                  <i class="fa fa-fw fa-calendar"></i>
-                </span>
-                <datepicker v-model="person.birthday" id="birthday" input-class="form-control" placeholder="Your birthday" required></datepicker>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group" :class="{ 'has-success': person58, 'has-error': error.birthday}">
+                <label for="birthday" class="control-label">Birthday</label>
+                <div class="input-group">
+                  <span class="input-group-addon">
+                    <i class="fa fa-fw fa-calendar"></i>
+                  </span>
+                  <datepicker v-if="!person58" v-model="person.birthday" id="birthday" input-class="form-control" placeholder="Your birthday" required></datepicker>
+                  <input v-else v-model="person.birthday" type="text" class="form-control" disabled>
+                </div>
+              </div>
+              <div class="form-group" :class="{ 'has-success': person58, 'has-error': error.gender}">
+                <label for="gender" class="control-label">Gender</label>
+                <select id="gender" v-model="person.gender" class="form-control" :disabled="person58" required>
+                  <option>Male</option>
+                  <option>Female</option>
+                  <option>...</option>
+                </select>
+              </div>
+              <div class="form-group" :class="{ 'has-success': person58, 'has-error': error.skin}">
+                <label for="skin" class="control-label">Skin color</label>
+                <input v-model="person.skin" id="skin" type="text" class="form-control" :disabled="person58" required>
+              </div>
+              <div class="form-group" :class="{ 'has-success': person58, 'has-error': error.hair}">
+                <label for="hair" class="control-label">Hair color</label>
+                <input v-model="person.hair" id="hair" type="text" class="form-control" :disabled="person58" required>
+              </div>
+              <div class="form-group" :class="{ 'has-success': person58, 'has-error': error.fee}">
+                <label for="fee" class="control-label">Fee power</label>
+                <input v-model="person.fee" id="fee" type="number" min="0" class="form-control" :disabled="person58" required>
               </div>
             </div>
-            <div class="form-group">
-              <label for="gender" class="control-label">Gender</label>
-              <select id="gender" v-model="person.gender" class="form-control">
-                <option>Male</option>
-                <option>Female</option>
-                <option>...</option>
-              </select>
+            <div class="col-md-6">
+              <div class="form-group" :class="{ 'has-success': person58}">
+                <label for="deathday" class="control-label">Deathday</label>
+                <div class="input-group">
+                  <span class="input-group-addon">
+                    <i class="fa fa-fw fa-calendar"></i>
+                  </span>
+                  <datepicker v-if="!person58" v-model="person.deathday" id="deathday" input-class="form-control" placeholder="Your deathday"></datepicker>
+                  <input v-else v-model="person.deathday" type="text" class="form-control" disabled>
+                </div>
+              </div>
+              <div class="form-group" :class="{ 'has-success': person58, 'has-error': error.number}">
+                <label for="number" class="control-label">Person number</label>
+                <input v-model="person.number" id="number" type="number" min="0" class="form-control" placeholder="Person number" :disabled="person58" required>
+              </div>
+              <div class="form-group" :class="{ 'has-success': person58, 'has-error': error.eye}">
+                <label for="eye" class="control-label">Eye color</label>
+                <input v-model="person.eye" id="eye" type="text" class="form-control" :disabled="person58" required>
+              </div>
+              <div class="form-group" :class="{ 'has-success': person58, 'has-error': error.height}">
+                <label for="height" class="control-label">Height</label>
+                <input v-model="person.height" id="height" type="number" min="0" class="form-control" :disabled="person58" required>
+              </div>
+              <div class="form-group" :class="{ 'has-success': person58, 'has-error': error.coordinates}">
+                <label for="place" class="control-label">Birth place</label>
+                <vue-google-autocomplete
+                id="place"
+                classname="form-control"
+                placeholder="Your birt city"
+                types="(cities)"
+                v-on:placechanged="getAddressData"
+                :disabled="person58" required
+                >
+              </vue-google-autocomplete>
+              {{person.coordinates.latitude}} {{person.coordinates.longitude}}
             </div>
-            <div class="form-group">
-              <label for="skin" class="control-label">Skin color</label>
-              <input v-model="person.skin" id="skin" type="text" class="form-control">
-            </div>
-            <div class="form-group">
-              <label for="hair" class="control-label">Hair color</label>
-              <input v-model="person.hair" id="hair" type="text" class="form-control">
-            </div>
-            <div class="form-group">
-              <label for="fee" class="control-label">Fee power</label>
-              <input v-model="person.fee" id="fee" type="number" min="0" class="form-control">
             </div>
           </div>
-          <div class="col-md-6">
-            <div class="form-group">
-              <label for="deathday" class="control-label">Deathday</label>
-              <div class="input-group">
-                <span class="input-group-addon">
-                  <i class="fa fa-fw fa-calendar"></i>
-                </span>
-                <datepicker v-model="person.deathday" id="deathday" input-class="form-control" placeholder="Your deathday"></datepicker>
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="number" class="control-label">Person number</label>
-              <input v-model="person.number" id="number" type="number" min="0" class="form-control" placeholder="Person number">
-            </div>
-            <div class="form-group">
-              <label for="eye" class="control-label">Eye color</label>
-              <input v-model="person.eye" id="eye" type="text" class="form-control">
-            </div>
-            <div class="form-group">
-              <label for="height" class="control-label">Height</label>
-              <input v-model="person.height" id="height" type="number" min="0" class="form-control">
-            </div>
-            <div class="form-group">
-              <label for="place" class="control-label">Birth place</label>
-              <vue-google-autocomplete
-              id="place"
-              classname="form-control"
-              placeholder="Your birt city"
-              types="(cities)"
-              v-on:placechanged="getAddressData"
-              >
-            </vue-google-autocomplete>
-            {{person.coordinates.latitude}} {{person.coordinates.longitude}}
+          <div v-if="!person58">
+            <!-- <button type="button" class="btn btn-default" @click="$emit('close')">Cancel</button> -->
+            <button type="button" class="btn btn-warning" @click="clearData()">Clear Data <i class="fa fa-times"></i></button>
+            <button type="button" class="btn btn-primary" @click="signPerson()">Sign person <i class="fa fa-lock"></i></button>
+          </div>
+          <div v-else>
+            <!-- <button type="button" class="btn btn-default" @click="$emit('close')">Cancel</button> -->
+            <button type="button" class="btn btn-warning" @click="clearData()">Clear Data <i class="fa fa-times"></i></button>
+            <button type="button" class="btn btn-primary" @click="toFile()">Write to file <i class="fa fa-file-text"></i></button>
+            <a :href="tomail" class="btn btn-primary" @click="">Send to email <i class="fa fa-paper-plane-o"></i></a>
           </div>
         </div>
-      </div>
-      <div v-if="!person58">
-        <!-- <button type="button" class="btn btn-default" @click="$emit('close')">Cancel</button> -->
-        <button type="button" class="btn btn-warning" @click="clearData()">Clear Data <i class="fa fa-times"></i></button>
-        <button type="button" class="btn btn-primary" @click="signPerson()">Sign person <i class="fa fa-lock"></i></button>
-      </div>
-      <div v-else>
-        <!-- <button type="button" class="btn btn-default" @click="$emit('close')">Cancel</button> -->
-        <button type="button" class="btn btn-warning" @click="clearData()">Clear Data <i class="fa fa-times"></i></button>
-        <button type="button" class="btn btn-primary" @click="toFile()">Write to file <i class="fa fa-file-text"></i></button>
-        <a :href="tomail" class="btn btn-primary" @click="">Send to email <i class="fa fa-paper-plane-o"></i></a>
-      </div>
-    </div>
-  </transition>
-</div>
+    </transition>
+  </div>
 </div>
 <div class="col-md-3" id="block-sidebar">
         <!-- <router-link to="/mails">
@@ -204,7 +207,7 @@
           }
         },
         loading: '',
-        error: ''
+        error: {}
       }
     },
     methods: {
@@ -252,7 +255,7 @@
             if (didItResize) {
               that.setSourceImg(blob)
             } else {
-              that.error = 'So big image'
+              that.error.image = 'So big image'
               return
             }
           })
@@ -263,7 +266,7 @@
         console.log(file.size)
         this.person.image.size = file.size
         if (file.size > 25000) {
-          this.error = 'So big image'
+          this.error.image = 'So big image'
           return
         }
         let that = this
@@ -291,26 +294,30 @@
         document.body.removeChild(element)
       },
       signPerson () {
-        var person = JSON.stringify(this.person)
-        var personBytes = this.toBytes(person)
-        this.toggleLoading()
-        // console.log(personBytes)
-        var byteMessage = new Buffer(personBytes)
-        // console.log(byteMessage)
-        let privatekey = this.$store.state.activeWallet.keys.private
-        var signature = new Buffer(nacl.sign(byteMessage, bs58.decode(privatekey)))
-        // console.log(signature)
-        var slice1 = byteMessage.slice(0, 53)
-        var slice2 = byteMessage.slice(53, byteMessage.length)
-        var buffers = [slice1, signature, slice2]
-        var messageBuf = Buffer.concat(buffers)
-        // console.log(messageBuf)
-        var person58 = bs58.encode(messageBuf)
-        console.log(person58)
-        this.person58 = person58
-        this.tomail = 'mailto:?subject=New person - ' + this.person.name + '&body=' + this.person58
+        if (this.validForm()) {
+          console.log('true')
+          var person = JSON.stringify(this.person)
+          var personBytes = this.toBytes(person)
+          this.toggleLoading()
+          // console.log(personBytes)
+          var byteMessage = new Buffer(personBytes)
+          // console.log(byteMessage)
+          let privatekey = this.$store.state.activeWallet.keys.private
+          var signature = new Buffer(nacl.sign(byteMessage, bs58.decode(privatekey)))
+          // console.log(signature)
+          var slice1 = byteMessage.slice(0, 53)
+          var slice2 = byteMessage.slice(53, byteMessage.length)
+          var buffers = [slice1, signature, slice2]
+          var messageBuf = Buffer.concat(buffers)
+          // console.log(messageBuf)
+          var person58 = bs58.encode(messageBuf)
+          console.log(person58)
+          this.person58 = person58
+          this.tomail = 'mailto:?subject=New person - ' + this.person.name + '&body=' + this.person58
+        }
       },
       clearData () {
+        this.error = {}
         this.person58 = null
         this.person.name = null
         this.person.description = null
@@ -328,6 +335,59 @@
         this.person.fee = null
         this.person.image.sourceUrl = null
         this.person.image.size = null
+      },
+      validForm () {
+        this.error = {}
+        var error = false
+        if (!this.person.name) {
+          this.error.name = true
+          error = true
+        }
+        if (!this.person.description) {
+          this.error.description = true
+          error = true
+        }
+        if (!this.person.birthday) {
+          this.error.birthday = true
+          error = true
+        }
+        if (!this.person.gender) {
+          this.error.gender = true
+          error = true
+        }
+        if (!this.person.number) {
+          this.error.number = true
+          error = true
+        }
+        if (!this.person.skin) {
+          this.error.skin = true
+          error = true
+        }
+        if (!this.person.eye) {
+          this.error.eye = true
+          error = true
+        }
+        if (!this.person.hair) {
+          this.error.hair = true
+          error = true
+        }
+        if (!this.person.height) {
+          this.error.height = true
+          error = true
+        }
+        if (!this.person.fee) {
+          this.error.fee = true
+          error = true
+        }
+        if (!this.person.coordinates.latitude || !this.person.coordinates.longitude) {
+          this.error.coordinates = true
+          error = true
+        }
+        if (error) {
+          return false
+        } else {
+          return true
+        }
       },
       toBytes (person) {
         var personBytes = toBytes.toUTF8Array(person)

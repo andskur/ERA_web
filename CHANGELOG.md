@@ -1,6 +1,9 @@
 ## Change Log
 
 ### v0.2.7 (2017/05/22)
+- [d43e422](https://github.com/andskur/ERA_web/commit/d43e4222647209e35d3699932bc0ffd1107a47f1) Readme updated (@andskur)
+- [1a05e6a](https://github.com/andskur/ERA_web/commit/1a05e6a68f54101fdb787d7a0edbfee8883138d2) ERA_web.zip (@andskur)
+- [1effdf6](https://github.com/andskur/ERA_web/commit/1effdf60e818bd71a456c2e30a76200b8fa7ec35) Update changelog (@andskur)
 - [947c1ef](https://github.com/andskur/ERA_web/commit/947c1ef7a952dae8f0bc98a209441f4223d89f79) .gitignore FIXED (@andskur)
 - [e922b89](https://github.com/andskur/ERA_web/commit/e922b895e509e6f36a1ceed0993ed9175b412d49) .gitignore updated (@andskur)
 - [87212c7](https://github.com/andskur/ERA_web/commit/87212c7e0672b98e98d875a830f41367d8a051cf) Persons components (@andskur)

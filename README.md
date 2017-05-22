@@ -3,7 +3,10 @@ ERA web interface
 Installation
 ------------
 
-#### Build Setup
+Download [ERA_web.zip](https://github.com/andskur/ERA_web/raw/master/ERA_web.zip)
+Unzip to your web server directory
+
+#### Build Setupy
 
 ``` bash
 # install dependencies

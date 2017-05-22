@@ -1,6 +1,11 @@
 ## Change Log
 
 ### v0.2.7 (2017/05/22)
+- [07671c0](https://github.com/andskur/ERA_web/commit/07671c010af346fb675bb6630b31319a7551681a) Merge branch 'master' of github.com:andskur/ERA_web (@andskur)
+- [a8f1315](https://github.com/andskur/ERA_web/commit/a8f131564c96d8c66f1f0d7ae9b9c3298e37bded) Person Add form validation and styling (@andskur)
+- [cfc3480](https://github.com/andskur/ERA_web/commit/cfc34803b4b1e53dc583d2560fc5c94f88a59dc6) package.json fixed (@andskur)
+- [34a583a](https://github.com/andskur/ERA_web/commit/34a583afd3eea710733a28939844c7963576d1a5) ERA_web.zip (@andskur)
+- [3e7bf91](https://github.com/andskur/ERA_web/commit/3e7bf9153f2dbc67a0f13d0908afa16a0270f139) Update changelog (@andskur)
 - [1b8be56](https://github.com/andskur/ERA_web/commit/1b8be56fc3d6fa961ea35a80b6e896000e48f695) Fix (@andskur)
 - [a5270ab](https://github.com/andskur/ERA_web/commit/a5270ab205a15249fb4d4549cb265f3d6319cb31) ERA_web.zip (@andskur)
 - [81ed07e](https://github.com/andskur/ERA_web/commit/81ed07e46a72aa5e9f8c15c3b251f9b40bd7b9dc) Update changelog (@andskur)

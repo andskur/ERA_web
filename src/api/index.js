@@ -19,7 +19,7 @@ export default {
     var url = config.serverURI + uri
     return axios({ method, url, data })
   }
-  */
+*/
 
   getData (endpoint) {
     // var data
